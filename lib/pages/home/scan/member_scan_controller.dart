@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:reward_center_kiosk/route.dart'; 
@@ -26,9 +28,10 @@ class MemberScanController extends GetxController {
   final cardNumber = TextEditingController();
   final cardNumberText = ''.obs;
   final isLoadingCard = false.obs;
-  final cardStatus = ScanCardStatus.start.obs;
+  final cardStatus = ScanCardStatus.start.obs; 
   @override
   void onInit() {
+    print('called member scan controller');
     Future.delayed(const Duration(milliseconds: 300), () {
       focusNode.requestFocus();
     });
@@ -40,7 +43,7 @@ class MemberScanController extends GetxController {
       if (cardNumberText.value.isNotEmpty) {
         try {
           cardStatus.value = ScanCardStatus.processing;
-          // var res = await service.findByCard(cardNumberText.value);
+          // var res = await service.findByCard(cardNumberText.value);  
           cardStatus.value = ScanCardStatus.found;
           Get.toNamed(RouteName.member,
               arguments: {'id': 1, 'cardNumber': cardNumberText.value});
