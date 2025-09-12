@@ -3,35 +3,35 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reward_center_kiosk/model/member_detail_model.dart';
 import 'package:reward_center_kiosk/pages/member/member_controller.dart';
-import 'package:reward_center_kiosk/route.dart';
-import 'package:reward_center_kiosk/util/const.dart';
+import 'package:reward_center_kiosk/route.dart'; 
 import 'package:reward_center_kiosk/util/widgets/avartar.dart';
+import 'package:reward_center_kiosk/util/widgets/switch_language.dart'; 
 
 class MemberScreen extends StatelessWidget {
   MemberScreen({super.key});
   final MemberController controller = Get.put(MemberController());
   @override
   Widget build(BuildContext context) {
+    final MemberDetailModel member = controller.member.value;
     return Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-              onPressed: () => Get.toNamed(RouteName.home),
-              icon: const Icon(Icons.arrow_back_ios_rounded)),
-          // title: Text(
-          //   "Member".tr,
-          //   style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-          // ),
-          // centerTitle: true,
-        ),
-        body: SafeArea(
-            child: Column(
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () => Get.toNamed(RouteName.home),
+            icon: const Icon(Icons.arrow_back_ios_rounded)), 
+            actions: const [SwitchLanguage()],
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
           children: [
-            _buildProfile(controller.member.value),
+            Text("Hello".tr),
+            _buildProfile(member)
           ],
-        )));
+        ),
+      ),
+    );
   }
-}
-
+} 
 Widget _buildProfile(MemberDetailModel member) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
@@ -52,9 +52,9 @@ Widget _buildProfile(MemberDetailModel member) {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
             child: SizedBox(
-              width: 200,
+              width: 180,
               child: Avartar(
-                iconSize: 100,
+                iconSize: 52,
                 isCircular: false,
                 imageUrl: '${member.photo}',
               ),
@@ -73,50 +73,34 @@ Widget _buildProfile(MemberDetailModel member) {
             ),
             Text(
               'Member name',
-              style: const TextStyle(fontSize: 52, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
-            Row(
-              children: [
-                const Icon(Icons.phone, size: 16),
-                const SizedBox(
-                  width: 4,
-                ),
-                Text("098264262", style: TextStyle(fontSize: 32))
-              ],
-            ),
-            Row(
-              children: [
-                const Icon(
-                  Icons.calendar_month_outlined,
-                  size: 16,
-                ),
-                const SizedBox(
-                  width: 4,
-                ),
-                Text(
-                    // Const.getDate(member.joinDate)
-                    "2025-05-02",
-                    style: TextStyle(fontSize: 32)),
-              ],
-            ),
-            Row(
-              children: [
-                const Icon(
-                  CupertinoIcons.building_2_fill,
-                  size: 16,
-                ),
-                const SizedBox(
-                  width: 4,
-                ),
-                Text(
-                  "Agent Name",
-                  style: TextStyle(fontSize: 32),
-                ),
-              ],
-            ),
+            infoRow(icon: Icons.phone, text: "098264262"),
+            const SizedBox(height: 8),
+            infoRow(icon: Icons.calendar_month_outlined, text: "2025-05-02"),
+            const SizedBox(height: 8),
+            infoRow(icon: CupertinoIcons.building_2_fill, text: "Agent Name"),
           ],
         ),
       ],
     ),
+  );
+}
+
+Widget infoRow({
+  required IconData icon,
+  required String text,
+  double iconSize = 24,
+  double fontSize = 24,
+}) {
+  return Row(
+    children: [
+      Icon(icon, size: iconSize),
+      const SizedBox(width: 12),
+      Text(
+        text,
+        style: TextStyle(fontSize: fontSize),
+      ),
+    ],
   );
 }

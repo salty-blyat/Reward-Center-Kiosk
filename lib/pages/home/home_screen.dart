@@ -26,14 +26,14 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   const Icon(Icons.fullscreen, size: 56, weight: 600),
                   Text(
-                    'Scan'.tr,
+                    'Scan Card'.tr,
                     style: const TextStyle(
                         fontSize: 52, height: 1, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
               Text(
-                "Please put your card to scan.".tr,
+                "Kindly scan your loyalty card.".tr,
                 style: const TextStyle(fontSize: 32),
               ),
               Obx(
@@ -70,8 +70,8 @@ class HomeScreen extends StatelessWidget {
                       ),
               ),
               Text(
-                "Please put your card to scan.".tr,
-                style: const TextStyle(fontSize: 32),
+                "Hold your loyalty card close to the NFC reader to proceed.".tr, textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 24),
               ),
             ],
           ),
@@ -95,8 +95,7 @@ class Card extends StatelessWidget {
       height: 500,
       width: double.infinity,
       margin: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-          color: color.withAlpha(50),
+      decoration: BoxDecoration( 
           border: Border.all(color: color),
           borderRadius: const BorderRadius.all(Radius.circular(8))),
       child: Icon(

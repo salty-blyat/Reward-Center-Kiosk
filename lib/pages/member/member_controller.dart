@@ -8,9 +8,9 @@ class MemberController extends GetxController {
   final member = MemberDetailModel().obs;
 
   @override
-  void onInit() async {
-    id.value = Get.arguments['id'];
-    cardNumber.value = Get.arguments['cardNumber'];
+  void onInit() async { 
+    // id.value = Get.arguments['id'] ?? 0;
+    // cardNumber.value = Get.arguments['cardNumber'];
     super.onInit();
   }
 
