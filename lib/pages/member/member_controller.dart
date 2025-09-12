@@ -1,16 +1,19 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reward_center_kiosk/model/member_detail_model.dart';
 
-class MemberController extends GetxController {
+class MemberController extends GetxController with SingleGetTickerProviderMixin {
   final isLoading = false.obs;
   final cardNumber = ''.obs;
   final id = 0.obs;
+   late TabController tabController ; 
   final member = MemberDetailModel().obs;
 
   @override
   void onInit() async { 
     // id.value = Get.arguments['id'] ?? 0;
     // cardNumber.value = Get.arguments['cardNumber'];
+     tabController = TabController(length: 3, vsync: this);
     super.onInit();
   }
 

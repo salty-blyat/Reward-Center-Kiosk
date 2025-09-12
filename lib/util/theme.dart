@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-   static const Color primaryColor = Color(0xFF0B3B5C);
+  static const Color primaryColor = Color(0xFF4486f6);
   static const Color processingColor = Color.fromARGB(255, 30, 135, 205);
-  static const Color primaryColorLigt = Color(0xFF885EA0);
+  static const Color primaryColorLigt = Color(0xFF4470c2);
   static const Color dangerColor = Color(0xFFc5000f);
   static const Color appBarBackgroundColor = Colors.white;
   static const Color backgroundColor = Color(0xFFf9fafb);
@@ -17,7 +17,7 @@ class AppTheme {
   
   static BorderRadiusGeometry borderRadius = BorderRadius.circular(4);
   static const TextStyle style = TextStyle(
-    fontSize: 12.0,
+    fontSize: 24.0,
     fontFamilyFallback: ['Gilroy', 'Kantumruy'],
   );
   static ThemeData get lightTheme {
@@ -46,7 +46,7 @@ class AppTheme {
           color: Colors.black,
         ),
         bodyMedium: style.copyWith(
-          fontSize: 12.0,
+          fontSize: 18.0,
           color: Colors.black,
         ),
         bodySmall: style.copyWith(
@@ -78,8 +78,10 @@ class AppTheme {
 
       // AppBar theme
       appBarTheme: AppBarTheme(
-        backgroundColor: appBarBackgroundColor,
-        toolbarHeight: 40,
+           backgroundColor: Colors.transparent,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
+        toolbarHeight: 84, 
         elevation: 1,
         iconTheme: const IconThemeData(color: primaryColor),
         centerTitle: true,

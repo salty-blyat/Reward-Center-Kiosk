@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:reward_center_kiosk/route.dart'; 
+import 'package:reward_center_kiosk/route.dart';
 
 enum ScanCardStatus {
   start,
@@ -28,7 +28,7 @@ class MemberScanController extends GetxController {
   final cardNumber = TextEditingController();
   final cardNumberText = ''.obs;
   final isLoadingCard = false.obs;
-  final cardStatus = ScanCardStatus.start.obs; 
+  final cardStatus = ScanCardStatus.start.obs;
   @override
   void onInit() {
     print('called member scan controller');
@@ -38,15 +38,22 @@ class MemberScanController extends GetxController {
     cardNumber.addListener(() {
       cardNumberText.value = cardNumber.text;
     });
-    debounce<String>(cardNumberText, (val) async { 
+   debounce<String>(cardNumberText, (val) async {
       cardNumberText.value = val;
+
       if (cardNumberText.value.isNotEmpty) {
         try {
           cardStatus.value = ScanCardStatus.processing;
-          // var res = await service.findByCard(cardNumberText.value);  
+          
+          await Future.delayed(Duration(seconds: 3));
+          
           cardStatus.value = ScanCardStatus.found;
+          await Future.delayed(Duration(seconds: 1));  
+          
           Get.toNamed(RouteName.member,
-              arguments: {'id': 1, 'cardNumber': cardNumberText.value});
+              arguments: {'id': 1, 'cardNumber': cardNumberText.value}); 
+
+          await Future.delayed(Duration(milliseconds: 500));
           cardStatus.value = ScanCardStatus.start;
           cardNumberText.value = '';
           cardNumber.clear();
@@ -59,6 +66,7 @@ class MemberScanController extends GetxController {
         }
       }
     }, time: const Duration(milliseconds: 500));
+
     super.onInit();
   }
 }

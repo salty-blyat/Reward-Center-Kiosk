@@ -1,14 +1,11 @@
-{
-  "LANG_URL": "https://core.sgx.bz/sec/files/langs/hotel",
-  "BASE_API_URL": "https://latest.sgx.bz/hotel/api",
+{ 
+  "BASE_API_URL": "https://latest.sgx.bz/vip/api",
   "AUTH_API_URL": "https://core.sgx.bz/api",
-  "AUTH_UI_URL": "https://core.sgx.bz",
-  "RECAPTCHA_SITE_KEY": "6LfL17QgAAAAAOyIb8bbx_oTT5ErpBDpYZ3yAm6o",
-  "APP_NAME": "House Keeping",
+  "AUTH_UI_URL": "https://core.sgx.bz", 
+  "APP_NAME": "Reward Center",
   "APP_ICON": "https://core.sgx.bz/files/22/12/logo_text-black-02_.png",
-  "RECAPTCHA_ENABLE": "false",
-  "PRIVACY_URL": "https://ryrith.github.io/hrapp/privacy.html",
+  "RECAPTCHA_ENABLE": "false", 
   "TENANT_CODE": "s8server",
-  "APP_CODE": "Hotel",
+  "APP_CODE": "VIP",
   "APP_VERSION": "1.0"
 }

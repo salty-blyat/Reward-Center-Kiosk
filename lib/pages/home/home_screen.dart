@@ -3,38 +3,49 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reward_center_kiosk/pages/home/scan/member_scan_controller.dart';
 import 'package:reward_center_kiosk/util/theme.dart';
+import 'package:reward_center_kiosk/util/widgets/switch_language.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
   final MemberScanController controller = Get.put(MemberScanController());
-  
+
   @override
   Widget build(BuildContext context) {
     controller.onInit();
     return Scaffold(
+      appBar: AppBar(
+        leading: const SizedBox.shrink(),
+        actions: const [
+          Padding(
+              padding: EdgeInsets.fromLTRB(0, 4, 16, 4),
+              child: SwitchLanguage())
+        ],
+      ),
       body: Center(
         child: Container(
           height: 900,
-          padding: const EdgeInsets.all(48),
           width: 600,
-          color: const Color.fromARGB(255, 230, 240, 250),
+          padding: const EdgeInsets.all(48),
+          // color: const Color.fromARGB(255, 230, 240, 250),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // Text('Hello'.tr),
                   const Icon(Icons.fullscreen, size: 56, weight: 600),
                   Text(
                     'Scan Card'.tr,
                     style: const TextStyle(
-                        fontSize: 52, height: 1, fontWeight: FontWeight.bold),
+                        fontSize: 48, height: 1, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
               Text(
                 "Kindly scan your loyalty card.".tr,
-                style: const TextStyle(fontSize: 32),
+                style:
+                    const TextStyle(fontSize: 32, color: AppTheme.defaultColor),
               ),
               Obx(
                 () => controller.isLoadingCard.isTrue
@@ -58,20 +69,23 @@ class HomeScreen extends StatelessWidget {
                                   color: AppTheme.processingColor,
                                   icon: CupertinoIcons.search),
                             },
+                            // Text(controller.cardStatus.value.toString()),   for debugging
                             Offstage(
                               child: TextField(
                                 controller: controller.cardNumber,
                                 focusNode: controller.focusNode,
                                 keyboardType: TextInputType.none,
                               ),
-                            ), 
+                            ),
                           ],
                         ),
                       ),
               ),
               Text(
-                "Hold your loyalty card close to the NFC reader to proceed.".tr, textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 24),
+                "Hold your loyalty card close to the NFC reader to proceed.".tr,
+                textAlign: TextAlign.center,
+                style:
+                    const TextStyle(fontSize: 24, color: AppTheme.defaultColor),
               ),
             ],
           ),
@@ -95,8 +109,9 @@ class Card extends StatelessWidget {
       height: 500,
       width: double.infinity,
       margin: const EdgeInsets.all(16),
-      decoration: BoxDecoration( 
-          border: Border.all(color: color),
+      decoration: BoxDecoration(
+          // border: Border.all(color: color),
+          color: color.withAlpha(50),
           borderRadius: const BorderRadius.all(Radius.circular(8))),
       child: Icon(
         icon,

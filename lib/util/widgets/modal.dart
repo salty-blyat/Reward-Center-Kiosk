@@ -2,19 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reward_center_kiosk/helpers/storage.dart';
-import 'package:reward_center_kiosk/util/const.dart'; 
+import 'package:reward_center_kiosk/util/const.dart';
 import 'package:reward_center_kiosk/util/theme.dart';
 
 class Modal {
-   static showLanguageDialog() {
+  static showLanguageDialog({bool dismissable = true}) {
     Get.dialog(
+      barrierDismissible: dismissable,
       Dialog(
         shape: RoundedRectangleBorder(
           borderRadius: AppTheme.borderRadius,
         ),
         child: SizedBox(
-          height: 250,
-          width: double.infinity,
+          height: 500,
+          width: 490,
           child: Column(
             children: [
               // Header Row
@@ -30,17 +31,25 @@ class Modal {
                       color: Colors.transparent,
                     ),
                   ),
-                  Text(
-                    'Choose Language'.tr,
-                    style: Theme.of(Get.context!).textTheme.titleMedium,
+                  Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                      'Choose Language'.tr,
+                      style: TextStyle(fontSize: 32),
+                    ),
                   ),
-                  IconButton(
-                    iconSize: 16,
-                    onPressed: () {
-                      Get.back(); // Close the dialog
-                    },
-                    icon: const Icon(CupertinoIcons.clear),
-                  ),
+                  dismissable
+                      ? Container(
+                        margin: EdgeInsets.only(right: 8),
+                        child: IconButton(
+                            iconSize: 24,
+                            onPressed: () {
+                              Get.back();
+                            },
+                            icon: const Icon(CupertinoIcons.clear),
+                          ),
+                      )
+                      : const SizedBox.shrink(), 
                 ],
               ),
               const SizedBox(height: 10),
@@ -50,12 +59,13 @@ class Modal {
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 10),
                   padding: const EdgeInsets.all(16),
-                  itemCount: Const.languages.length, 
+                  itemCount: Const.languages.length,
                   itemBuilder: (context, index) {
                     final language = Const.languages[index];
                     final isSelected =
                         Get.locale?.languageCode == language['code'];
                     return ListTile(
+                      minTileHeight: 84, 
                       selected: isSelected,
                       selectedColor: AppTheme.primaryColor,
                       shape: RoundedRectangleBorder(
@@ -68,18 +78,17 @@ class Modal {
                         ),
                       ),
                       trailing: Icon(CupertinoIcons.checkmark_circle,
-                          size: 20,
+                          size: 48,
                           color: isSelected
                               ? AppTheme.primaryColor
                               : Colors.transparent),
-                      title: Text(
-                          language['label'] ?? 'Unknown'), // Handle null safely
+                      title: Text( language['label'] ?? 'Unknown', style:  TextStyle(fontSize: 32), ), 
                       leading: Image.asset(
                         language['image'] ??
                             'assets/default.png', // Fallback image
-                        width: 32,
-                        height: 32,
-                        fit: BoxFit.cover,
+                        width:  72,
+                        height: 72,
+                        fit: BoxFit.contain,
                       ),
                       onTap: () async {
                         // Handle language selection
@@ -96,6 +105,49 @@ class Modal {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  static errorDialog(String title, String message) {
+    Get.dialog(
+      Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: SizedBox(
+          height: 500,
+          width: 450,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    const SizedBox(height: 12),
+                    const Icon(CupertinoIcons.clear_circled,
+                        size: 70, color: AppTheme.dangerColor),
+                    const SizedBox(height: 10),
+                    Text(
+                      title.tr,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(message.tr, textAlign: TextAlign.center),
+                  ],
+                ),
+                ElevatedButton(
+                  child: Text('Ok'.tr),
+                  onPressed: () => Navigator.of(Get.context!).pop(),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reward_center_kiosk/util/const.dart';
@@ -11,12 +10,10 @@ class SwitchLanguage extends StatelessWidget {
   Widget build(BuildContext context) {
     Map<String, dynamic> currentLocale = Const.languages
         .firstWhere((language) => Get.locale?.languageCode == language['code']);
-    return ElevatedButton(
-        onPressed: () => Modal.showLanguageDialog(),
-        child: Image.asset(
-          currentLocale['image'] ?? 'assets/default.png', 
-          width: 32,
-          height: 32,
-        ));
+    return GestureDetector(
+      onTap: () => Modal.showLanguageDialog(),
+      child: Image.asset(currentLocale['image'] ?? 'assets/default.png',
+          width: 72, height: 72, fit: BoxFit.cover),
+    );
   }
 }

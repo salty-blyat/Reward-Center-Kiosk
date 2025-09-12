@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart'; 
 import 'package:get/get.dart';
+import 'package:reward_center_kiosk/helpers/token_interceptor.dart';
 
 class Translate extends Translations {
-  final dio = Dio(); 
+  final dio = DioClient(); 
   @override
   Map<String, Map<String, String>> get keys => translations;
 
