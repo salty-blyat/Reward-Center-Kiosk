@@ -5,7 +5,9 @@ import 'package:reward_center_kiosk/model/member_detail_model.dart';
 import 'package:reward_center_kiosk/model/offer_model.dart';
 import 'package:reward_center_kiosk/pages/member/member_controller.dart';
 import 'package:reward_center_kiosk/route.dart';
+import 'package:reward_center_kiosk/util/services/printer_controller.dart';
 import 'package:reward_center_kiosk/util/theme.dart';
+import 'package:reward_center_kiosk/util/widgets/appbar_icon.dart';
 import 'package:reward_center_kiosk/util/widgets/avartar.dart';
 import 'package:reward_center_kiosk/util/widgets/button.dart';
 import 'package:reward_center_kiosk/util/widgets/network_img.dart';
@@ -18,15 +20,9 @@ class MemberScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final MemberDetailModel member = controller.member.value;
     return Scaffold(
-      appBar: AppBar(  
-        leading: IconButton(
-            onPressed: () => Get.toNamed(RouteName.home),
-            icon: const Icon(Icons.arrow_back_ios_rounded)),
-        actions: const [
-          Padding(
-              padding: EdgeInsets.fromLTRB(0, 4, 16, 4),
-              child: SwitchLanguage())
-        ],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(84),
+        child: AppbarIcon(),
       ),
       body: Column(
         children: [_buildProfile(member), _buildAvailableOffer()],
@@ -38,23 +34,41 @@ class MemberScreen extends StatelessWidget {
 Widget _buildAvailableOffer() {
   return Expanded(
     child: Container(
-      color: AppTheme.defaultColor.withAlpha(20)
-      ,margin: EdgeInsets.only(top: 18),
-      child: GridView.count(
-        crossAxisCount: 2, 
-        childAspectRatio: 6 / 8,
-        scrollDirection: Axis.vertical,
-        children: List.generate(100, (index) {
-          return _buildOffer();
-        }),
+      color: AppTheme.defaultColor.withAlpha(20),
+      margin: EdgeInsets.only(top: 18),
+      padding: EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Available Offers",
+            style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Expanded(
+            child: GridView.count(
+              crossAxisCount: 3,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 5 / 7,
+              children: List.generate(100, (index) {
+                return _buildOffer();
+              }),
+            ),
+          ),
+        ],
       ),
     ),
   );
 }
 
 Widget _buildOffer() {
+  final PrinterController printerController = Get.put(PrinterController());
   return Container(
-    margin: EdgeInsets.all(16),
+      margin: EdgeInsets.all(0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -68,7 +82,7 @@ Widget _buildOffer() {
               topRight: Radius.circular(12),
             ),
             child: NetworkImg(
-                height: 300,
+                height: 200,
                 badge: "10 pts",
                 src:
                     "https://img.freepik.com/free-vector/special-offer-buy-one-get-one-free-discount-coupon-background_1017-51061.jpg?semt=ais_hybrid&w=740&q=80"),
@@ -77,25 +91,26 @@ Widget _buildOffer() {
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
             child: Text(
               'Buy 1 Get 1 Free',
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
           const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
             child: Text(
               'Seasonal',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 18,
               ),
             ),
           ),
           Expanded(
             child: Container(
-              margin: EdgeInsets.all(16),
+              margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
               child: MyButton(
                   label: 'Redeem',
+                  fontSize: 18,
                   onPressed: () {
-                    print('hi');
+                    print('ds');
                   }),
             ),
           )
@@ -118,7 +133,7 @@ Widget _buildProfile(MemberDetailModel member) {
           child: Avartar(
             iconSize: 250,
             isCircular: false,
-            imageUrl: '${member.photo}',
+            imageUrl: 'https://static.wikia.nocookie.net/naruto/images/4/4a/Obito_Uchiha.png/revision/latest/scale-to-width-down/1200?cb=20220223045744',
           ),
         ),
         // ),
@@ -148,31 +163,40 @@ Widget _buildProfile(MemberDetailModel member) {
           const SizedBox(height: 8),
           infoRow(icon: CupertinoIcons.building_2_fill, text: "Agent Name"),
           const SizedBox(height: 32),
-         Container(
-  width: 430,
-  height: 145,
-  decoration: BoxDecoration(
-    color: AppTheme.primaryColor,
-    borderRadius: BorderRadius.circular(16),
-    boxShadow: [
-      BoxShadow(
-        color: AppTheme.primaryColor.withOpacity(0.3),
-        blurRadius: 12,
-        offset: const Offset(0, 6),
-      ),
-    ],
-  ),
-  child: const Center(
-    child: Text(
-      '97,600 pts',
-      style: TextStyle(
-        fontSize: 48,
-        fontWeight: FontWeight.bold,
-        color: Colors.white, // contrast!
-      ),
-    ),
-  ),
-) 
+          Container(
+            width: 430,
+            height: 145,
+            decoration: BoxDecoration(
+              color: AppTheme.primaryColor,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: AppTheme.primaryColor.withOpacity(0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 6),
+                ),
+              ],
+            ),
+            child: Material(
+                color: AppTheme.primaryColor,
+              borderRadius: BorderRadius.circular(12),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(12),
+                splashColor: AppTheme.primaryColor.withOpacity(0.2),
+                onTap: () => Get.toNamed(RouteName.transactionHistory),
+                child: const Center(
+                  child: Text(
+                    '97,600 pts',
+                    style: TextStyle(
+                      fontSize: 48,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,  
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     ],

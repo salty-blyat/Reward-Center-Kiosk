@@ -45,10 +45,10 @@ class MemberScanController extends GetxController {
         try {
           cardStatus.value = ScanCardStatus.processing;
           
-          await Future.delayed(Duration(seconds: 3));
+          await Future.delayed(Duration(milliseconds: 500 ));
           
           cardStatus.value = ScanCardStatus.found;
-          await Future.delayed(Duration(seconds: 1));  
+          await Future.delayed(Duration(milliseconds: 500));  
           
           Get.toNamed(RouteName.member,
               arguments: {'id': 1, 'cardNumber': cardNumberText.value}); 

@@ -64,7 +64,7 @@ class Avartar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(4),
       child: Center(
-        child: Icon(Icons.person_outline, size: iconSize),
+        child: Icon(Icons.person_outline_outlined, size: iconSize),
       ),
     );
   }

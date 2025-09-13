@@ -81,7 +81,7 @@ class NetworkImg extends StatelessWidget {
                 badge!,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 32,
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
               ),
