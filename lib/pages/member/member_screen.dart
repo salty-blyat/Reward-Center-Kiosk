@@ -20,8 +20,8 @@ class MemberScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final MemberDetailModel member = controller.member.value;
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(84),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(84),
         child: AppbarIcon(),
       ),
       body: Column(
@@ -35,8 +35,8 @@ Widget _buildAvailableOffer() {
   return Expanded(
     child: Container(
       color: AppTheme.defaultColor.withAlpha(20),
-      margin: EdgeInsets.only(top: 18),
-      padding: EdgeInsets.all(12),
+      margin: const EdgeInsets.only(top: 18),
+      padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -68,7 +68,7 @@ Widget _buildAvailableOffer() {
 Widget _buildOffer() {
   final PrinterController printerController = Get.put(PrinterController());
   return Container(
-      margin: EdgeInsets.all(0),
+      margin: const EdgeInsets.all(0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -107,10 +107,10 @@ Widget _buildOffer() {
             child: Container(
               margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
               child: MyButton(
-                  label: 'Redeem',
+                  label: 'Redeem'.tr,
                   fontSize: 18,
                   onPressed: () {
-                    print('ds');
+                    Get.toNamed(RouteName.redemptionOp);
                   }),
             ),
           )
@@ -125,11 +125,11 @@ Widget _buildProfile(MemberDetailModel member) {
       const SizedBox(
         width: 8,
       ),
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+      const Padding(
+        padding: EdgeInsets.symmetric(vertical: 0, horizontal: 8),
         child: SizedBox(
           width: 300,
-          height: 440,
+          height: 400,
           child: Avartar(
             iconSize: 250,
             isCircular: false,
@@ -206,8 +206,8 @@ Widget _buildProfile(MemberDetailModel member) {
 Widget infoRow({
   required IconData icon,
   required String text,
-  double iconSize = 36,
-  double fontSize = 36,
+  double iconSize =32,
+  double fontSize =32,
 }) {
   return Row(
     children: [

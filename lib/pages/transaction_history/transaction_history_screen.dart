@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_utils/get_utils.dart';
 import 'package:reward_center_kiosk/model/transaction_model.dart';
-import 'package:reward_center_kiosk/pages/transaction_history/transaction_detail.dart';
+import 'package:reward_center_kiosk/pages/transaction_history/transaction_detail_screen.dart';
 import 'package:reward_center_kiosk/util/const.dart';
 import 'package:reward_center_kiosk/util/theme.dart';
 import 'package:reward_center_kiosk/util/widgets/appbar_icon.dart';
@@ -182,56 +182,65 @@ class TransactionHistoryScreen extends StatelessWidget {
 }
 
 Widget _transaction(TransactionModel transaction) {
-  return Material(
-    color: Colors.white,
-    borderRadius: BorderRadius.circular(12),
-    child: InkWell(
-      borderRadius: BorderRadius.circular(12),
-      splashColor: AppTheme.primaryColor.withOpacity(0.2),
-      onTap: () => Get.dialog(Dialog(child: TransactionDetail())),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${transaction.typeNameEn} ${transaction.offerName}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 24,
-                    ),
+  return Column(
+    children: [
+      Material(
+        elevation: 0.5,
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(8),
+          splashColor: AppTheme.primaryColor.withOpacity(0.2),
+          onTap: () => Get.dialog(Dialog(child: TransactionDetailScreen())),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${transaction.typeNameEn} ${transaction.offerName}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 24,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        Const.getDateTime(
+                            transaction.transDate ?? DateTime.now()),
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    Const.getDateTime(transaction.transDate ?? DateTime.now()),
-                    style: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 18,
-                    ),
+                ),
+                const SizedBox(width: 16),
+                Text(
+                  '${transaction.amount?.toStringAsFixed(0) ?? 0} pts',
+                  style: TextStyle(
+                    color: transaction.amount != null
+                        ? transaction.amount! > 0
+                            ? AppTheme.successColor
+                            : transaction.amount! < 0
+                                ? AppTheme.dangerColor
+                                : Colors.black
+                        : Colors.black,
+                    fontSize: 24,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(width: 16),
-            Text(
-              '${transaction.amount?.toStringAsFixed(0) ?? 0} pts',
-              style: TextStyle(
-                color: transaction.amount != null
-                    ? transaction.amount! > 0
-                        ? AppTheme.successColor
-                        : transaction.amount! < 0
-                            ? AppTheme.dangerColor
-                            : Colors.black
-                    : Colors.black,
-                fontSize: 24,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
-    ),
+      const SizedBox(
+        height: 12,
+      )
+    ],
   );
 }

@@ -24,7 +24,7 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Center(
         child: Container(
-          height: 900,
+          height: 700,
           width: 600,
           padding: const EdgeInsets.all(48),
           // color: const Color.fromARGB(255, 230, 240, 250),

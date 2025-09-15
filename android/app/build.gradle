@@ -11,7 +11,7 @@ repositories {
     }
 android {
     namespace = "com.example.reward_center_kiosk"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 35
     ndkVersion = flutter.ndkVersion 
   
     compileOptions {
@@ -33,10 +33,11 @@ android {
         targetSdk = 30
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-        // defaultConfig {
-    //     ndk {
-    //    abiFilters 'armeabi-v7a', 'x86'
-    // }
+
+         
+        //     ndk {
+        //    abiFilters 'armeabi-v7a', 'x86'   uncomment this when decided to prep with printing
+        // }
     
     }
 

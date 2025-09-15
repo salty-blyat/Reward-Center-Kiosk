@@ -27,15 +27,80 @@ class AppbarIcon extends StatelessWidget implements PreferredSizeWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
             ),
-            onPressed: () => Get.toNamed(RouteName.home),
-            icon: Icon(Icons.home, size: 48),
+            onPressed: () {
+              Get.dialog(
+                Dialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Container(
+                    width: 450,
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Logout".tr,
+                          style: const TextStyle(
+                            fontSize: 32,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          "Are you sure you want to log out?".tr,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 24),
+                        ),
+                        const SizedBox(height: 48),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                Get.back(); // close dialog
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  backgroundColor: AppTheme.dangerColor),
+                              child: const Text("No"),
+                            ),
+                            const SizedBox(
+                              width: 12,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Get.back();
+                                Get.offAllNamed(RouteName.home);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                backgroundColor: AppTheme.primaryColor,
+                              ),
+                              child: Text("Yes".tr),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+            icon: Icon(Icons.home_outlined, size: 48),
           ),
           const SizedBox(width: 16),
-          _buildIcon(routeName: RouteName.member, icon: Icons.person),
-          const SizedBox(width: 16),  
+          _buildIcon(
+              routeName: RouteName.member,
+              icon: Icons.person_outline,
+              selectedIcon: Icons.person),
+          const SizedBox(width: 16),
           _buildIcon(
               routeName: RouteName.transactionHistory,
-              icon: Icons.monetization_on_outlined),
+              icon: Icons.monetization_on_outlined,
+              selectedIcon: Icons.monetization_on),
         ],
       ),
       actions: const [
@@ -46,7 +111,10 @@ class AppbarIcon extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-Widget _buildIcon({required String routeName, required IconData icon}) {
+Widget _buildIcon(
+    {required String routeName,
+    required IconData icon,
+    required IconData selectedIcon}) {
   bool isCurrent = Get.currentRoute == routeName;
 
   return IconButton(
@@ -65,6 +133,6 @@ Widget _buildIcon({required String routeName, required IconData icon}) {
       ),
     ),
     onPressed: () => Get.toNamed(routeName),
-    icon: Icon(icon, size: 48),
+    icon: Icon(isCurrent ? selectedIcon : icon, size: 48),
   );
 }
