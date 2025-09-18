@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reward_center_kiosk/helpers/storage.dart';
+import 'package:reward_center_kiosk/route.dart';
 import 'package:reward_center_kiosk/util/const.dart';
 import 'package:reward_center_kiosk/util/theme.dart';
 
@@ -32,24 +33,24 @@ class Modal {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(32),
                     child: Text(
-                      'Choose Language'.tr,
-                      style: TextStyle(fontSize: 32),
+                      'Language'.tr,
+                      style: Get.textTheme.displayMedium?.copyWith(color:Colors.black),
                     ),
                   ),
                   dismissable
                       ? Container(
-                        margin: EdgeInsets.only(right: 8),
-                        child: IconButton(
+                          margin: const EdgeInsets.only(right: 8),
+                          child: IconButton(
                             iconSize: 24,
                             onPressed: () {
                               Get.back();
                             },
                             icon: const Icon(CupertinoIcons.clear),
                           ),
-                      )
-                      : const SizedBox.shrink(), 
+                        )
+                      : const SizedBox.shrink(),
                 ],
               ),
               const SizedBox(height: 10),
@@ -65,7 +66,7 @@ class Modal {
                     final isSelected =
                         Get.locale?.languageCode == language['code'];
                     return ListTile(
-                      minTileHeight: 84, 
+                      minTileHeight: 84,
                       selected: isSelected,
                       selectedColor: AppTheme.primaryColor,
                       shape: RoundedRectangleBorder(
@@ -82,13 +83,16 @@ class Modal {
                           color: isSelected
                               ? AppTheme.primaryColor
                               : Colors.transparent),
-                      title: Text( language['label'] ?? 'Unknown', style:  TextStyle(fontSize: 32), ), 
+                      title: Text(
+                        language['label'] ?? 'Unknown',
+                        style: Get.textTheme.bodyLarge,
+                      ),
                       leading: Image.asset(
                         language['image'] ??
                             'assets/default.png', // Fallback image
-                        width:  72,
-                        height: 72,
-                        fit: BoxFit.contain,
+                        width:  52,
+                        height: 52,
+                        fit: BoxFit.cover,
                       ),
                       onTap: () async {
                         // Handle language selection
@@ -104,6 +108,55 @@ class Modal {
                   },
                 ),
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  static noLocationDialog() {
+    Get.dialog(
+      Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Container(
+          width: 450,
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Location Not Found".tr,
+                style: const TextStyle(fontSize: 32, color: Colors.black),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                "Please contact administrator or staff.".tr,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 24, color: Colors.black),
+              ),
+              const SizedBox(height: 32),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      backgroundColor: AppTheme.primaryColor,
+                    ),
+                    child: Text("Return".tr),
+                  ),
+                ],
+              )
             ],
           ),
         ),

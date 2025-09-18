@@ -2,6 +2,10 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'member_detail_model.g.dart';
 
+// TODO: delete this later. 
+
+
+
 @JsonSerializable()
 class MemberDetailModel {
   final int? id;

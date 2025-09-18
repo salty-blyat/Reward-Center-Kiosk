@@ -1,21 +1,23 @@
-// import 'package:get_storage/get_storage.dart';
+class InMemoryStorage {
+  static final InMemoryStorage _instance = InMemoryStorage._();
+  InMemoryStorage._();
+  factory InMemoryStorage() => _instance;
 
-// class Storage {
-//   final storage = GetStorage();
+  final Map<String, String> _store = {};
 
-//   void write(String key, String value) {
-//     storage.write(key, value);
-//   }
+  void write(String key, String value) {
+    _store[key] = value;
+  }
 
-//   String? read(String key) {
-//     return storage.read(key);
-//   }
+  String? read(String key) {
+    return _store[key];
+  }
 
-//   void delete(String key) {
-//     storage.remove(key);
-//   }
+  void delete(String key) {
+    _store.remove(key);
+  }
 
-//   void deleteAll() {
-//     storage.erase();
-//   }
-// }
+  void deleteAll() {
+    _store.clear();
+  }
+}

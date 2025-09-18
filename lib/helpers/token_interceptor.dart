@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get_utils/get_utils.dart';
 import 'package:get/route_manager.dart';
 import 'package:reward_center_kiosk/app_setting.dart';
+import 'package:reward_center_kiosk/util/theme.dart';
 import 'package:reward_center_kiosk/util/widgets/modal.dart';
 
 class DioClient {
@@ -11,8 +13,6 @@ class DioClient {
   DioClient() {
     dio.interceptors.add(InterceptorsWrapper(
       onRequest: (options, handler) async {
-        options.headers['Tenant-Code'] = AppSetting.setting['TENANT_CODE'];
-        options.headers['App-Code'] = AppSetting.setting['APP_CODE'];
         options.headers['Content-Type'] = 'application/json';
         return handler.next(options);
       },
@@ -20,9 +20,19 @@ class DioClient {
         return handler.next(response);
       },
       onError: (DioException e, handler) async {
-        if (Get.isDialogOpen == true) Get.back();
-        Modal.errorDialog('Unsuccessful', _getResponseMessage(e));
-
+        if (!Get.isSnackbarOpen) {
+          Get.showSnackbar(
+            GetSnackBar(
+              title: 'Unsuccessful'.tr,
+              duration: const Duration(seconds: 2),
+              message: _getResponseMessage(e),
+              margin: const EdgeInsets.all(32),
+              borderRadius: 8,
+              backgroundColor: AppTheme.dangerColor,
+            ),
+          );
+        }
+ 
         return handler.next(e);
       },
     ));
@@ -37,7 +47,7 @@ class DioClient {
       rethrow;
     }
   }
- 
+
   Future<Response?> post(String url, {Map<String, dynamic>? data}) async {
     try {
       Response response = await dio.post('$baseUrl/$url', data: data);
@@ -65,16 +75,16 @@ class DioClient {
       return null;
     }
   }
- 
+
   Future<Response> put(String url, {Map<String, dynamic>? data}) async {
     try {
       Response response = await dio.put('$baseUrl/$url', data: data);
       return response;
-    } on DioException { 
+    } on DioException {
       rethrow;
     }
   }
- 
+
   Future<Response?> delete(String url, Map<String, dynamic>? data) async {
     try {
       Response response = await dio.delete('$baseUrl/$url',

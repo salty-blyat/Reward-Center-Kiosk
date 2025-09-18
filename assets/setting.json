@@ -1,6 +1,5 @@
 { 
-  "BASE_API_URL": "https://latest.sgx.bz/vip/api",
-  "AUTH_API_URL": "https://core.sgx.bz/api",
+  "BASE_API_URL": "http://d3.sgx.bz:9898/api/kios",
   "AUTH_UI_URL": "https://core.sgx.bz", 
   "APP_NAME": "Reward Center",
   "APP_ICON": "https://core.sgx.bz/files/22/12/logo_text-black-02_.png",

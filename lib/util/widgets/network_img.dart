@@ -8,11 +8,13 @@ class NetworkImg extends StatelessWidget {
   final String? src;
   final double height;
   final String? badge;
+  final double? width;
 
   const NetworkImg({
     super.key,
     this.src,
     required this.height,
+    this.width = double.infinity,
     this.badge,
   });
 
@@ -39,13 +41,13 @@ class NetworkImg extends StatelessWidget {
             : Image.network(
                 src ?? '',
                 height: height,
-                width: double.infinity,
+                width: width,
                 fit: BoxFit.cover,
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
                   return Container(
                     height: height,
-                    width: double.infinity,
+                    width: width,
                     color: Colors.grey[300],
                     child: const Center(
                       child: CircularProgressIndicator(strokeWidth: 2),
@@ -55,7 +57,7 @@ class NetworkImg extends StatelessWidget {
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
                     height: height,
-                    width: double.infinity,
+                    width: width,
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       // borderRadius: const BorderRadius.only(
@@ -81,7 +83,7 @@ class NetworkImg extends StatelessWidget {
                 badge!,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 24,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),

@@ -8,10 +8,10 @@ import 'package:reward_center_kiosk/pages/transaction_history/transaction_histor
 
 class Routes {
   static final List<GetPage> pages = [
-    GetPage(name: RouteName.home, page: () => HomeScreen()), 
-    GetPage(name: RouteName.member, page: () => MemberScreen()), 
-    GetPage(name: RouteName.transactionHistory, page: () => TransactionHistoryScreen()), 
-    GetPage(name: RouteName.redemptionOp, page: () => RedemptionOperationScreen())
+    GetPage(name: RouteName.home, page: () => HomeScreen(), transition: Transition.fadeIn), 
+    GetPage(name: RouteName.member, page: () => MemberScreen(), transition: Transition.fadeIn), 
+    GetPage(name: RouteName.transactionHistory, page: () => TransactionHistoryScreen(), transition:  Transition.fadeIn), 
+    GetPage(name: RouteName.redemptionOp, page: () => RedemptionOperationScreen(), transition: Transition.fadeIn)
   ];
 }
 

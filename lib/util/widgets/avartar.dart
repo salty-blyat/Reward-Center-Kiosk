@@ -49,7 +49,7 @@ class Avartar extends StatelessWidget {
               : imageUrl != null && imageUrl!.isNotEmpty
                   ? Image.network(
                       imageUrl!,
-                      fit: BoxFit.contain,
+                      fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return _buildIcon();
                       },

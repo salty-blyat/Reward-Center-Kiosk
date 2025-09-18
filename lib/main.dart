@@ -1,19 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart'; 
 import 'package:reward_center_kiosk/app_setting.dart';
-// import 'package:get_storage/get_storage.dart';
 import 'package:reward_center_kiosk/helpers/storage.dart';
+// import 'package:get_storage/get_storage.dart';
 import 'package:reward_center_kiosk/route.dart';
-import 'package:reward_center_kiosk/util/const.dart';
 import 'package:reward_center_kiosk/util/theme.dart';
 import 'package:reward_center_kiosk/util/translation.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();  
+  // await Storage().init();
   // await GetStorage.init();
   await AppSetting().initSetting();
   // await Firebase.initializeApp();

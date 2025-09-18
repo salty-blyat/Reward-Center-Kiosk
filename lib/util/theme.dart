@@ -13,20 +13,26 @@ class AppTheme {
   static const Color defaultColor = Color(0xFF5F5F5F);
   static const Color secondaryColorRgb = Color(0xFF0163AA);
 
-
-  
   static BorderRadiusGeometry borderRadius = BorderRadius.circular(4);
   static const TextStyle style = TextStyle(
     fontSize: 24.0,
     fontFamilyFallback: ['Gilroy', 'Kantumruy'],
   );
+static const double iconExtraLarge = 56;
+
+
+static const double iconLarge = 48;
+  static const double iconMedium = 32;
+  static const double iconSmall = 16;
+  static const Color   memberClassColor = Color(0xFF3b82f6)  ;
+   
+
   static ThemeData get lightTheme {
     return ThemeData.light().copyWith(
-      brightness: Brightness.light, 
-      primaryColor: primaryColor, 
- 
+      brightness: Brightness.light,
+      primaryColor: primaryColor,
+
       hintColor: Colors.amber,
- 
       scaffoldBackgroundColor: Colors.white,
       cardColor: Colors.white,
       colorScheme: const ColorScheme.light(
@@ -35,14 +41,30 @@ class AppTheme {
       ),
 
       // Text theme
-      textTheme: TextTheme(
+        textTheme: TextTheme(
         displayLarge: style.copyWith(
-          fontSize: 30.0,
-          fontWeight: FontWeight.bold,
-          color: primaryColor,
+          fontSize: 48.0,
         ),
+        displayMedium: style.copyWith(fontSize: 32.0),
+        displaySmall: style.copyWith(fontSize: 24.0),
+
+        titleLarge: style.copyWith(
+          fontSize: 56.0,
+          color: Colors.black
+         ),
+        titleMedium: style.copyWith(
+          fontSize: 36.0,
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+        titleSmall: style.copyWith(
+          fontSize: 32.0,
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+  
         bodyLarge: style.copyWith(
-          fontSize: 14.0,
+          fontSize: 24.0,
           color: Colors.black,
         ),
         bodyMedium: style.copyWith(
@@ -50,23 +72,8 @@ class AppTheme {
           color: Colors.black,
         ),
         bodySmall: style.copyWith(
-          fontSize: 12.0,
-          color: Colors.black,
-        ),
-        titleMedium: style.copyWith(
           fontSize: 14.0,
           color: Colors.black,
-          fontWeight: FontWeight.bold,
-        ),
-        titleSmall: style.copyWith(
-          fontSize: 12.0,
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-        ),
-        titleLarge: style.copyWith(
-          fontSize: 20.0,
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
         ),
       ),
 
@@ -78,10 +85,10 @@ class AppTheme {
 
       // AppBar theme
       appBarTheme: AppBarTheme(
-           backgroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
         scrolledUnderElevation: 0,
         surfaceTintColor: Colors.transparent,
-        toolbarHeight: 84, 
+        toolbarHeight: 84,
         elevation: 1,
         iconTheme: const IconThemeData(color: primaryColor),
         centerTitle: true,

@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
+import 'package:reward_center_kiosk/pages/home/home_controller.dart';
 import 'package:reward_center_kiosk/route.dart';
 import 'package:reward_center_kiosk/util/theme.dart';
 import 'package:reward_center_kiosk/util/widgets/switch_language.dart';
 
 class AppbarIcon extends StatelessWidget implements PreferredSizeWidget {
-  const AppbarIcon({super.key});
+  AppbarIcon({super.key});
+  final HomeController controller = Get.put(HomeController());
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-
   @override
   Widget build(BuildContext context) {
+
     return AppBar(
       automaticallyImplyLeading: false,
       title: Row(
         children: [
+   
           IconButton(
             style: IconButton.styleFrom(
               shape: RoundedRectangleBorder(
@@ -40,14 +43,14 @@ class AppbarIcon extends StatelessWidget implements PreferredSizeWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "Logout".tr,
+                          "Exit".tr,
                           style: const TextStyle(
                             fontSize: 32,
                           ),
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          "Are you sure you want to log out?".tr,
+                          "Are you sure you want to exit?".tr,
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 24),
                         ),
@@ -60,7 +63,8 @@ class AppbarIcon extends StatelessWidget implements PreferredSizeWidget {
                                 Get.back(); // close dialog
                               },
                               style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 12),
                                   backgroundColor: AppTheme.dangerColor),
                               child: const Text("No"),
                             ),
@@ -73,7 +77,8 @@ class AppbarIcon extends StatelessWidget implements PreferredSizeWidget {
                                 Get.offAllNamed(RouteName.home);
                               },
                               style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -103,8 +108,33 @@ class AppbarIcon extends StatelessWidget implements PreferredSizeWidget {
               selectedIcon: Icons.monetization_on),
         ],
       ),
-      actions: const [
-        Padding(
+      actions: [
+              Obx(() => controller.selectedLocation.value != null &&
+                  controller.selectedLocation.value?.name != null
+              ? Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                  margin: const EdgeInsets.only(right: 4),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.location_on_outlined,
+                          size: 24, color: AppTheme.primaryColor),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      Text(
+                          controller.selectedLocation.value?.name ??
+                              "Unknown",
+                          style: Get.textTheme.bodyLarge?.copyWith(
+                              color: AppTheme.primaryColor,
+                              fontWeight: FontWeight.bold))
+                    ],
+                  ),
+                )
+              : const SizedBox.shrink()),
+
+        const SizedBox(width: 16),
+        const Padding(
             padding: EdgeInsets.fromLTRB(0, 4, 16, 4), child: SwitchLanguage())
       ],
     );

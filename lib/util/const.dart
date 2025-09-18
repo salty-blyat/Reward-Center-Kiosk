@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:reward_center_kiosk/pages/transaction_history/transaction_history_controller.dart';
 
 class Const {
   static const String version = '1.9';
@@ -8,10 +9,65 @@ class Const {
   static String numberFormat(double value) {
     return NumberFormat('###.##').format(value);
   }
+  static String formatCardNumber(String cardNumber) {
+    return cardNumber
+        .replaceAllMapped(
+          RegExp(r".{1,3}"), // split every 4 chars
+          (match) => "${match.group(0)} ",
+        )
+        .trim();
+  }
+
+
+  static String getTransType(int tran) {
+    if (tran == TransactionTypeEnum.open.value) {
+      return "Open";
+    } else if (tran == TransactionTypeEnum.fill.value) {
+      return "Fill";
+    } else if (tran == TransactionTypeEnum.credit.value) {
+      return "Credit";
+    } else if (tran == TransactionTypeEnum.drop.value) {
+      return "Drop";
+    } else if (tran == TransactionTypeEnum.count.value) {
+      return "Count";
+    } else if (tran == TransactionTypeEnum.update.value) {
+      return "Update";
+    } else if (tran == TransactionTypeEnum.close.value) {
+      return "Close";
+    } else {
+      return "Transaction Type Not found";
+    }
+  }
 
   static String getDateTime(DateTime? dateTime) {
     if (dateTime == null) return '-';
     return DateFormat('dd-MM-yyyy HH:mm').format(dateTime.toLocal());
+  }
+
+   static String prettyDate(DateTime dateTime) {
+    final now = DateTime.now();
+    final diff = now.difference(dateTime);
+
+    if (diff.inSeconds < 60) {
+      return '${diff.inSeconds}s ago';
+    } else if (diff.inMinutes < 60) {
+      return '${diff.inMinutes}m ago';
+    } else if (diff.inHours < 24) {
+      return '${diff.inHours}h ago';
+    } else if (diff.inDays == 1) {
+      return 'Yesterday';
+    } else if (diff.inDays < 7) {
+      return '${diff.inDays}d ago';
+    } else if (diff.inDays < 30) {
+      final weeks = (diff.inDays / 7).floor();
+      return '${weeks}w ago';
+    } else if (diff.inDays < 365) {
+      final months = (diff.inDays / 30).floor();
+      return '${months}mo ago';
+    } else {
+      final years = (diff.inDays / 365).floor();
+      return '${years}y ago';
+    }
   }
 
   static String getDate(DateTime? dateTime) {
@@ -21,7 +77,7 @@ class Const {
 
   static const Map<String, String> authorized = {
     'Authorized': 'authorized',
-    'Lang': 'lang', 
+    'Lang': 'lang',
   };
   static const List<Map<String, dynamic>> languages = [
     {
