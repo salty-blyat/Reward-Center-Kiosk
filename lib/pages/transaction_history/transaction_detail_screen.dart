@@ -118,10 +118,10 @@ Widget _buildRow(String label, String value, {Color? color}) {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SizedBox(
-            width: 300, child: Text(label, style: TextStyle(fontSize: 24))),
+            width: 300, child: Text(label, style: const TextStyle(fontSize: 24))),
         Expanded(
             child: Text(
-          value,
+          value.tr,
           style: AppTheme.style.copyWith(
             color: color,
           ),

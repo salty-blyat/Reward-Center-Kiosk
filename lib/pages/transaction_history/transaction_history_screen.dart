@@ -73,7 +73,7 @@ Widget _transaction(TransactionModel transaction) {
         child: InkWell(
           borderRadius: BorderRadius.circular(8),
           splashColor: AppTheme.primaryColor.withOpacity(0.2),
-          onTap: () => Get.dialog(Dialog(child: TransactionDetailScreen())),
+          // onTap: () => Get.dialog(Dialog(child: TransactionDetailScreen())),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             child: Row(
@@ -95,8 +95,7 @@ Widget _transaction(TransactionModel transaction) {
                   ),
                 ),
                 const SizedBox(width: 16),
-                Text(
-                  // '${transaction.amount?.toStringAsFixed(0) ?? 0} pts',
+                Text( 
                   '${transaction.point ?? 0} pts',
                   style: Get.textTheme.bodyMedium?.copyWith(
                     color: transaction.point != null

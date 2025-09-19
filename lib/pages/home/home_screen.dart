@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                   child: Row(
-                    children: [ 
+                    children: [
                       const Icon(Icons.location_on_outlined,
                           size: 20, color: AppTheme.primaryColor),
                       const SizedBox(
@@ -211,40 +211,46 @@ Widget _buildLocationDialog() {
               itemCount: controller.locations.length,
               itemBuilder: (context, index) {
                 final location = controller.locations[index];
-                final selectedLocation = controller.loadSelectedLocation();
-                final isSelected = selectedLocation != null &&
-                    location.id == selectedLocation.id;
 
-                return ListTile(
-                  minVerticalPadding: 24,
-                  selected: isSelected,
-                  selectedColor: AppTheme.primaryColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: AppTheme.borderRadius,
-                    side: BorderSide(
-                      color: isSelected
-                          ? AppTheme.primaryColor
-                          : Colors.grey.shade300,
-                      width: 2,
-                    ),
-                  ),
-                  trailing: Icon(
-                    CupertinoIcons.checkmark_circle,
-                    size: 32,
-                    color:
-                        isSelected ? AppTheme.primaryColor : Colors.transparent,
-                  ),
-                  title: Text(
-                    location.name ?? 'Unknown',
-                    style: const TextStyle(fontSize: 24),
-                    // style: Get.textTheme.bodyLarge,
-                  ),
-                  onTap: () {
-                    controller.saveLocation(location);
-                    controller.loadSelectedLocation();
-                    Get.back();
-                  },
-                );
+               return FutureBuilder(
+                    future: controller.loadSelectedLocation(),
+                    builder: (context, snapshot) {
+                      final selectedLocation = snapshot.data;
+                      final isSelected = selectedLocation != null &&
+                          location.id == selectedLocation.id;
+
+                      return ListTile(
+                        minVerticalPadding: 24,
+                        selected: isSelected,
+                        selectedColor: AppTheme.primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: AppTheme.borderRadius,
+                          side: BorderSide(
+                            color: isSelected
+                                ? AppTheme.primaryColor
+                                : Colors.grey.shade300,
+                            width: 2,
+                          ),
+                        ),
+                        trailing: Icon(
+                          CupertinoIcons.checkmark_circle,
+                          size: 32,
+                          color: isSelected
+                              ? AppTheme.primaryColor
+                              : Colors.transparent,
+                        ),
+                        title: Text(
+                          location.name ?? 'Unknown',
+                          style: const TextStyle(fontSize: 24),
+                          // style: Get.textTheme.bodyLarge,
+                        ),
+                        onTap: ()  async {
+                         await controller.saveLocation(location);
+                         await controller.loadSelectedLocation();
+                          Get.back();
+                        },
+                      );
+                    });
               },
             ),
           ),

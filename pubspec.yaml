@@ -44,6 +44,7 @@ dependencies:
   skeletonizer: ^1.4.3
   reactive_forms: ^17.0.1  
   font_awesome_flutter: ^9.0.0
+  # idle_detector_wrapper: ^1.2.1
   
 dev_dependencies:
   flutter_test:

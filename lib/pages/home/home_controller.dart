@@ -12,16 +12,15 @@ class HomeController extends GetxController {
   final storage = InMemoryStorage();
   Rx<CompanyModel> companyInfo = CompanyModel().obs;
   RxList<LocationModel> locations = <LocationModel>[].obs;
-  RxBool loadingLocation = false.obs; 
+  RxBool loadingLocation = false.obs;
   Rx<LocationModel?> selectedLocation = LocationModel().obs;
-
 
   @override
   void onInit() async {
     super.onInit();
     await setCompanyInfoAsync();
-    loadCompanyFromStorage();
-    loadSelectedLocation(); 
+    companyInfo.value = await loadCompanyFromStorage();
+    await loadSelectedLocation();
   }
 
   Future<void> getCompanyInfo() async {
@@ -49,21 +48,19 @@ class HomeController extends GetxController {
   }
 
   // utils
-  void saveLocation(LocationModel model) {
+  Future<void> saveLocation(LocationModel model) async {
     selectedLocation.value = model;
-    storage.write("selected_location", jsonEncode(model.toJson()));
+    await storage.write("selected_location", jsonEncode(model.toJson()));
   }
 
-  LocationModel? loadSelectedLocation() {
-    final data = storage.read("selected_location");
+  Future<LocationModel?> loadSelectedLocation() async {
+    final data = await storage.read("selected_location");
 
     if (data == null) return null;
     if (data is String) {
-      final Map<String, dynamic> map = jsonDecode(data as String);
+      final Map<String, dynamic> map = jsonDecode(data);
       final location = LocationModel.fromJson(map);
-      Future.delayed(Duration.zero , () =>  
-      selectedLocation.value = location 
-      );
+      Future.delayed(Duration.zero, () => selectedLocation.value = location);
       return location;
     }
     return null;
@@ -71,28 +68,15 @@ class HomeController extends GetxController {
 
   Future<void> setCompanyInfoAsync() async {
     await getCompanyInfo();
-    final Map<String, dynamic> json = companyInfo.value.toJson();
-
-    json.forEach((key, value) {
-      if (value != null) {
-        storage.write("company_$key", value.toString());
-      }
-    });
+    final Map<String, dynamic> model = companyInfo.value.toJson();  
+    await storage.write("company", jsonEncode(model));
   }
 
-  CompanyModel loadCompanyFromStorage() {
-    final json = <String, dynamic>{};
-
-    final sample = CompanyModel();
-    sample.toJson().keys.forEach((key) {
-      final value = storage.read("company_$key");
-
-      if (value != null) {
-        json[key] =
-            key == "passcodeThresholdPoint" ? int.tryParse(value) : value;
-      }
-    });
-    print('company info: ${json}');
-    return CompanyModel.fromJson(json);
+  Future<CompanyModel> loadCompanyFromStorage() async {
+    String model = await storage.read("company");
+    if(model.isEmpty){
+      return CompanyModel();
+    } 
+    return CompanyModel.fromJson(jsonDecode(model));
   }
 }

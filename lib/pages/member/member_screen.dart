@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:reward_center_kiosk/model/offer_model.dart';
 import 'package:reward_center_kiosk/pages/member/member_controller.dart';
 import 'package:reward_center_kiosk/route.dart';
@@ -24,7 +22,9 @@ class MemberScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller.onInit();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.onInit();
+    }); 
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(84),
@@ -132,9 +132,7 @@ Widget _buildOffer(OfferModel offer) {
 
 Widget _buildProfile() {
   final MemberController controller = Get.put(MemberController());
-  String passCode = controller.member.value.hasPassCode == true
-      ? "PassCode Set"
-      : "PassCode not Set";
+ 
   return Obx(() {
     return Skeletonizer(
         enabled: controller.isLoading.isTrue,
@@ -233,25 +231,7 @@ Widget _buildProfile() {
                         style: Get.textTheme.bodyMedium?.copyWith(
                             color: Colors.black, fontWeight: FontWeight.bold),
                       )),
-                  const SizedBox(width: 32),
-                  _buildInfoChunk(
-                      icon: Icons.lock_outline,
-                      title: "Security",
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 4),
-                        decoration: BoxDecoration(
-                            color: controller.member.value.hasPassCode == true
-                                ? AppTheme.primaryColor
-                                : AppTheme.dangerColor,
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Text(
-                          passCode,
-                          style: Get.textTheme.bodySmall?.copyWith(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                      )),
-                  const SizedBox(width: 32),
+                  const SizedBox(width: 48), 
                   _buildInfoChunk(
                       icon: Icons.access_time_rounded,
                       title: "Last Seen",
@@ -260,17 +240,7 @@ Widget _buildProfile() {
                             DateTime.now()),
                         style: Get.textTheme.bodyMedium
                             ?.copyWith(fontWeight: FontWeight.bold),
-                      )),
-                  const SizedBox(width: 32),
-                  _buildInfoChunk(
-                      icon: Icons.credit_card_outlined,
-                      title: "Card Number",
-                      child: Text(
-                        Const.formatCardNumber(
-                            controller.member.value.cardNumber ?? "0"),
-                        style: Get.textTheme.bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      )),
+                      )), 
                 ],
               )
             ],
@@ -286,14 +256,14 @@ Widget _buildCard(
     width: 180,
     padding: const EdgeInsets.all(24),
     decoration: BoxDecoration(
-      color: Colors.white, // required for shadow to be visible
+      color: Colors.white, 
       borderRadius: BorderRadius.circular(12),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.1), // shadow color
-          spreadRadius: 2, // how much it spreads
-          blurRadius: 8, // softness of the shadow
-          offset: const Offset(0, 4), // (x, y) → downwards 4px
+          color: Colors.black.withOpacity(0.1),  
+          spreadRadius: 2,  
+          blurRadius: 8, 
+          offset: const Offset(0, 4),  
         ),
       ],
     ),

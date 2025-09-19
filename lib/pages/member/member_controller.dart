@@ -35,7 +35,7 @@ class MemberController extends GetxController {
   Future<void> availableOffer() async {
     try {
       isLoadingOffer.value = true;
-      final selectedLocation = homeController.loadSelectedLocation();
+      final selectedLocation = await homeController.loadSelectedLocation();
 
       if (member.value.id == null || selectedLocation?.id == null) {
         print("Member id or location id null");
@@ -56,7 +56,7 @@ class MemberController extends GetxController {
     isLoading.value = true;
     try {
       final response = await service.findByCard(id);
-      setMemberData(response);
+      await setMemberData(response);
       member.value = response;
     } catch (e) {
       isLoading.value = false;
@@ -78,8 +78,7 @@ class MemberController extends GetxController {
     }
   }
 
-  void setMemberData(MemberModel model) {
-    storage.write("member", jsonEncode(model.toJson()));
-    print(storage.read("member"));
+  Future<void> setMemberData(MemberModel model) async {
+    await storage.write("member", jsonEncode(model.toJson()));
   }
 }

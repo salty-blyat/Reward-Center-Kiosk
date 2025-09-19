@@ -1,23 +1,41 @@
+import 'dart:io';
+import 'dart:convert';
+
 class InMemoryStorage {
   static final InMemoryStorage _instance = InMemoryStorage._();
   InMemoryStorage._();
   factory InMemoryStorage() => _instance;
 
-  final Map<String, String> _store = {};
+  final String _fileName = 'temp_storage.json';
 
-  void write(String key, String value) {
-    _store[key] = value;
+  File get _file => File('${Directory.systemTemp.path}/$_fileName');
+
+  Future<void> write(String key, dynamic value) async {
+    Map<String, dynamic> data = await _readFile() ?? {};
+    data[key] = value;
+    await _file.writeAsString(jsonEncode(data));
   }
 
-  String? read(String key) {
-    return _store[key];
+  Future<dynamic> read(String key) async {
+    final data = await _readFile();
+    return data?[key];
   }
 
-  void delete(String key) {
-    _store.remove(key);
+  Future<void> delete(String key) async {
+    final data = await _readFile() ?? {};
+    data.remove(key);
+    await _file.writeAsString(jsonEncode(data));
   }
 
-  void deleteAll() {
-    _store.clear();
+  Future<void> deleteAll() async {
+    if (await _file.exists()) {
+      await _file.delete();
+    }
+  }
+
+  Future<Map<String, dynamic>?> _readFile() async {
+    if (!await _file.exists()) return null;
+    final content = await _file.readAsString();
+    return jsonDecode(content);
   }
 }

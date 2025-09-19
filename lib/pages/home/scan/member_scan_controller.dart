@@ -7,6 +7,8 @@ import 'package:reward_center_kiosk/helpers/storage.dart';
 import 'package:reward_center_kiosk/pages/home/home_controller.dart';
 import 'package:reward_center_kiosk/pages/member/member_controller.dart';
 import 'package:reward_center_kiosk/route.dart';
+import 'package:reward_center_kiosk/util/services/in_active_controller.dart';
+import 'package:reward_center_kiosk/util/widgets/inactive_detector.dart';
 import 'package:reward_center_kiosk/util/widgets/modal.dart';
 
 enum ScanCardStatus {
@@ -34,6 +36,7 @@ class MemberScanController extends GetxController {
   final MemberController memberController = Get.put(MemberController());
   final FocusNode focusNode = FocusNode();
   final cardNumber = TextEditingController();
+  final InActiveController inActiveController = Get.find<InActiveController>();
   final cardNumberText = ''.obs;
   final isLoadingCard = false.obs;
   final cardStatus = ScanCardStatus.start.obs;
@@ -55,14 +58,15 @@ class MemberScanController extends GetxController {
     });
 
     debounce<String>(cardNumberText, (val) async {
+      inActiveController.extendDeadline();
       cardNumberText.value = val;
 
       if (cardNumberText.value.isNotEmpty) {
         try {
           cardStatus.value = ScanCardStatus.processing;
-          await Future.delayed(const Duration(milliseconds: 500));
+          // await Future.delayed(const Duration(milliseconds: 500));
 
-          final selectedLocation = homeController.loadSelectedLocation();
+          final selectedLocation =  await homeController.loadSelectedLocation();
           print("selected location $selectedLocation");
           if (selectedLocation == null) {
             if (!Get.isDialogOpen!) {
@@ -74,26 +78,27 @@ class MemberScanController extends GetxController {
             focusNode.requestFocus();
             return;
           }
-          bool exist =
-              await memberController.checkExistUser(cardNumberText.value);
+          bool exist = await memberController.checkExistUser(cardNumberText.value);
           if (!exist) {
             cardNumber.clear();
             cardNumberText.value = '';
             cardStatus.value = ScanCardStatus.notFound;
             focusNode.requestFocus();
-            await Future.delayed(const Duration(seconds: 2));
+            // await Future.delayed(const Duration(seconds: 2));
             cardStatus.value = ScanCardStatus.start;
             return;
           }
 
+          
           cardStatus.value = ScanCardStatus.found;
-          await Future.delayed(const Duration(milliseconds: 500));
+          
+          // await Future.delayed(const Duration(milliseconds: 500));
 
           Get.toNamed(RouteName.member,
               arguments: {'cardNumber': cardNumberText.value});
           print("card number: ${cardNumberText.value}");
 
-          await Future.delayed(const Duration(milliseconds: 500));
+          // await Future.delayed(const Duration(milliseconds: 500));
           cardStatus.value = ScanCardStatus.start;
           cardNumberText.value = '';
           cardNumber.clear();
@@ -107,7 +112,7 @@ class MemberScanController extends GetxController {
       }
     }, time: const Duration(milliseconds: 500));
 
-    super.onInit();
+    0per.onInit();
   }
 
   void dispose() {

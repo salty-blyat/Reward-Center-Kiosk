@@ -31,16 +31,15 @@ class RedemptionOperationScreen extends StatelessWidget {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Processing redemption',
-                          style: Get.textTheme.titleSmall
-                              ?.copyWith(fontWeight: FontWeight.bold)),
+                      const Text('Processing redemption',
+                          style: TextStyle(fontSize: 24 ,fontWeight: FontWeight.w600)),
                       const SizedBox(height: 16),
                       Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(
-                              width: 150,
-                              height: 150,
+                              width:  195,
+                              height: 90,
                               child: Avartar(
                                 iconSize: 150,
                                 isCircular: false,
@@ -48,6 +47,7 @@ class RedemptionOperationScreen extends StatelessWidget {
                                     'https://static.wikia.nocookie.net/naruto/images/4/4a/Obito_Uchiha.png/revision/latest/scale-to-width-down/1200?cb=20220223045744',
                               ),
                             ),
+                                   
                             const SizedBox(width: 12),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

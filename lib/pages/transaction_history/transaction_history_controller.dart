@@ -7,7 +7,6 @@ import 'package:reward_center_kiosk/model/member_model.dart';
 import 'package:reward_center_kiosk/model/transaction_model.dart';
 import 'package:reward_center_kiosk/pages/transaction_history/transaction_history_service.dart';
 
-
 enum TransactionTypeEnum {
   open,
   fill,
@@ -49,7 +48,7 @@ class TransactionHistoryController extends GetxController {
   Future<void> search() async {
     try {
       loading.value = true;
-      final member = loadCurrentMember();
+      final member = await loadCurrentMember();
       var res = await service.search(member.id.toString());
       list.assignAll(res);
     } catch (e) {
@@ -60,8 +59,8 @@ class TransactionHistoryController extends GetxController {
     }
   }
 
-  MemberModel loadCurrentMember() {
-    final data = storage.read("member");
+  Future<MemberModel> loadCurrentMember() async {
+    final data = await storage.read("member");
     final Map<String, dynamic> map = jsonDecode(data as String);
     return MemberModel.fromJson(map);
   }

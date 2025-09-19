@@ -1,30 +1,30 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:get/get.dart'; 
+import 'package:get/get.dart';
 import 'package:reward_center_kiosk/app_setting.dart';
-import 'package:reward_center_kiosk/helpers/storage.dart';
-// import 'package:get_storage/get_storage.dart';
 import 'package:reward_center_kiosk/route.dart';
+import 'package:reward_center_kiosk/util/services/in_active_controller.dart';
 import 'package:reward_center_kiosk/util/theme.dart';
 import 'package:reward_center_kiosk/util/translation.dart';
+import 'package:reward_center_kiosk/util/widgets/inactive_detector.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();  
-  // await Storage().init();
-  // await GetStorage.init();
+  WidgetsFlutterBinding.ensureInitialized();
   await AppSetting().initSetting();
-  // await Firebase.initializeApp();
-  // await ShowNotificationService.initialize();
   final Translate translationService = Translate();
   await translationService.loadTranslations();
-  // NotificationService.initialize();
   var initialRoute = RouteName.home;
-
-  runApp(MyApp(
-      translationService: translationService, initialRoute: initialRoute));
+  
+  Get.put(InActiveController(),permanent: true);
+ 
+  runApp(InactiveDetector(
+      child: MyApp(
+          translationService: translationService, initialRoute: initialRoute)));
 }
 
 class MyApp extends StatelessWidget {
