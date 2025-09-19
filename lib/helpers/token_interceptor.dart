@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get_utils/get_utils.dart';
 import 'package:get/route_manager.dart';
 import 'package:reward_center_kiosk/app_setting.dart';
-import 'package:reward_center_kiosk/util/theme.dart';
-import 'package:reward_center_kiosk/util/widgets/modal.dart';
+import 'package:reward_center_kiosk/util/theme.dart'; 
 
-class DioClient {
-  final Dio dio = Dio();
+class DioClient {  final Dio dio = Dio();
   final String baseUrl = '${AppSetting.setting['BASE_API_URL']}';
 
   DioClient() {

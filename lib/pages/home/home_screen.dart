@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller.onInit(); 
+    controller.onInit();
     return Scaffold(
       appBar: AppBar(
         leading: const SizedBox.shrink(),
@@ -30,16 +30,16 @@ class HomeScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                   child: Row(
-                    children: [
+                    children: [ 
                       const Icon(Icons.location_on_outlined,
-                          size: 24, color: AppTheme.primaryColor),
+                          size: 20, color: AppTheme.primaryColor),
                       const SizedBox(
                         width: 4,
                       ),
                       Text(
                           homeController.selectedLocation.value?.name ??
                               "Unknown",
-                          style: Get.textTheme.bodyLarge?.copyWith(
+                          style: Get.textTheme.bodyMedium?.copyWith(
                               color: AppTheme.primaryColor,
                               fontWeight: FontWeight.bold))
                     ],
@@ -57,7 +57,6 @@ class HomeScreen extends StatelessWidget {
           height: 600,
           width: 600,
           padding: const EdgeInsets.all(48),
-          // color: const Color.fromARGB(255, 230, 240, 250),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -153,10 +152,10 @@ Widget _buildLocationDialog() {
     double width = 490;
     double height = 500;
     if (controller.loadingLocation.isTrue) {
-      return   SizedBox(
+      return SizedBox(
           height: height, width: width, child: const Center(child: Loading()));
     } else if (controller.locations.isEmpty) {
-      return   SizedBox(
+      return SizedBox(
           height: height, width: width, child: const Center(child: NotFound()));
     }
 
@@ -182,7 +181,9 @@ Widget _buildLocationDialog() {
                 child: Row(
                   children: [
                     const Icon(Icons.location_on_outlined, size: 28),
-                    const SizedBox(width: 4,),
+                    const SizedBox(
+                      width: 4,
+                    ),
                     Text(
                       'Location'.tr,
                       style: Get.textTheme.displayMedium
@@ -234,7 +235,8 @@ Widget _buildLocationDialog() {
                         isSelected ? AppTheme.primaryColor : Colors.transparent,
                   ),
                   title: Text(
-                    location.name ?? 'Unknown', style: const TextStyle(fontSize: 24),
+                    location.name ?? 'Unknown',
+                    style: const TextStyle(fontSize: 24),
                     // style: Get.textTheme.bodyLarge,
                   ),
                   onTap: () {

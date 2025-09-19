@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
+import 'package:reward_center_kiosk/app_setting.dart';
 import 'package:reward_center_kiosk/helpers/storage.dart';
 import 'package:reward_center_kiosk/model/company_model.dart';
 import 'package:reward_center_kiosk/model/location_model.dart';
@@ -11,15 +12,16 @@ class HomeController extends GetxController {
   final storage = InMemoryStorage();
   Rx<CompanyModel> companyInfo = CompanyModel().obs;
   RxList<LocationModel> locations = <LocationModel>[].obs;
-  RxBool loadingLocation = false.obs;
+  RxBool loadingLocation = false.obs; 
   Rx<LocationModel?> selectedLocation = LocationModel().obs;
+
 
   @override
   void onInit() async {
     super.onInit();
     await setCompanyInfoAsync();
     loadCompanyFromStorage();
-    loadSelectedLocation();
+    loadSelectedLocation(); 
   }
 
   Future<void> getCompanyInfo() async {
@@ -57,7 +59,7 @@ class HomeController extends GetxController {
 
     if (data == null) return null;
     if (data is String) {
-      final Map<String, dynamic> map = jsonDecode(data);
+      final Map<String, dynamic> map = jsonDecode(data as String);
       final location = LocationModel.fromJson(map);
       Future.delayed(Duration.zero , () =>  
       selectedLocation.value = location 

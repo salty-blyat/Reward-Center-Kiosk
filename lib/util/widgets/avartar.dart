@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:reward_center_kiosk/util/theme.dart'; 
 
 class Avartar extends StatelessWidget {
@@ -64,7 +65,7 @@ class Avartar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(4),
       child: Center(
-        child: Icon(Icons.person_outline_outlined, size: iconSize),
+        child: Icon(FontAwesomeIcons.userAlt, size: iconSize),
       ),
     );
   }

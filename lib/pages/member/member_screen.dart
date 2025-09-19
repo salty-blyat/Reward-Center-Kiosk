@@ -43,13 +43,13 @@ Widget _buildAvailableOffer() {
     child: Container(
       color: AppTheme.defaultColor.withAlpha(20),
       margin: const EdgeInsets.only(top: 18),
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text("Available Offers".tr,
               style:
-                  const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  const TextStyle(fontSize: 24, fontWeight: FontWeight.w600)),
           const SizedBox(height: 12),
           Expanded(
             child: RefreshIndicator(
@@ -68,7 +68,7 @@ Widget _buildAvailableOffer() {
                     crossAxisCount: 4, // maybe 4 is better looking
                     mainAxisSpacing: 12,
                     crossAxisSpacing: 12,
-                    childAspectRatio: 5 / 7,
+                    childAspectRatio: 6 / 9,
                     children: controller.listOffer
                         .map((OfferModel offer) => _buildOffer(offer))
                         .toList());
@@ -93,17 +93,16 @@ Widget _buildOffer(OfferModel offer) {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(8),
-                topRight: Radius.circular(8),
-              ),
-              child: NetworkImg(
-                  height: 150,
-                  badge: "${offer.cost ?? 0} pts",
-                  src: offer.image),
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(8),
+              topRight: Radius.circular(8),
             ),
+            child: NetworkImg(
+                height: 150,
+                width: double.infinity,
+                badge: "${offer.cost ?? 0} pts",
+                src: offer.image),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -120,7 +119,6 @@ Widget _buildOffer(OfferModel offer) {
             child: Container(
               margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               child: MyButton(
-                  // disabled: offer.canRedeem ?? false,
                   label: 'Redeem'.tr,
                   fontSize: 16,
                   onPressed: () {
@@ -153,9 +151,9 @@ Widget _buildProfile() {
                     children: [
                       SizedBox(
                         height: 195,
-                        width:  195,
+                        width: 195,
                         child: Avartar(
-                          iconSize: 32,
+                          iconSize: 110,
                           imageUrl: controller.member.value.photo,
                         ),
                       ),
@@ -185,42 +183,25 @@ Widget _buildProfile() {
                           ],
                         ),
                       ),
-                      // Column(
-                      //   crossAxisAlignment: CrossAxisAlignment.start,
-                      //   children: [
-                      //     const SizedBox(height: 12),
-                      //     Text("Code: ${controller.member.value.code ?? '-'}",
-                      //         style: Get.textTheme.bodySmall
-                      //             ?.copyWith(color: AppTheme.defaultColor)),
-                      //     Text(
-                      //         "Member since: ${Const.getDate(controller.member.value.joinDate)}",
-                      //         style: Get.textTheme.bodySmall
-                      //             ?.copyWith(color: AppTheme.defaultColor)),
-                      //   ],
-                      // ),
                     ],
                   ),
                   const SizedBox(
-                    width: 16,
-                  ),
-                  const SizedBox(
-                    width: 16,
+                    width: 52,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(controller.member.value.name ?? '-',
                           style: const TextStyle(
-                              fontSize: 28, fontWeight: FontWeight.bold)),
-                      // const SizedBox(height: 24),
-                      // 
+                              fontSize: 24, fontWeight: FontWeight.bold)),
                       Text("Code: ${controller.member.value.code ?? '-'}",
                           style: Get.textTheme.bodySmall
                               ?.copyWith(color: AppTheme.defaultColor)),
                       Text(
-                          "Member since: ${Const.getDate(controller.member.value.joinDate)}",
+                          "${'Member since'.tr}: ${Const.getDate(controller.member.value.joinDate)}",
                           style: Get.textTheme.bodySmall
-                              ?.copyWith(color: AppTheme.defaultColor)),const SizedBox(height: 12),
+                              ?.copyWith(color: AppTheme.defaultColor)),
+                      const SizedBox(height: 12),
                       Row(
                         children: [
                           _buildCard(
@@ -252,7 +233,7 @@ Widget _buildProfile() {
                         style: Get.textTheme.bodyMedium?.copyWith(
                             color: Colors.black, fontWeight: FontWeight.bold),
                       )),
-                  const SizedBox(width: 32 ),
+                  const SizedBox(width: 32),
                   _buildInfoChunk(
                       icon: Icons.lock_outline,
                       title: "Security",
@@ -270,7 +251,7 @@ Widget _buildProfile() {
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       )),
-                  const SizedBox(width: 32 ),
+                  const SizedBox(width: 32),
                   _buildInfoChunk(
                       icon: Icons.access_time_rounded,
                       title: "Last Seen",
@@ -280,7 +261,7 @@ Widget _buildProfile() {
                         style: Get.textTheme.bodyMedium
                             ?.copyWith(fontWeight: FontWeight.bold),
                       )),
-                  const SizedBox(width: 32 ),
+                  const SizedBox(width: 32),
                   _buildInfoChunk(
                       icon: Icons.credit_card_outlined,
                       title: "Card Number",

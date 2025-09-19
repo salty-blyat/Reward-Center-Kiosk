@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NetworkImg extends StatelessWidget {
@@ -27,7 +26,7 @@ class NetworkImg extends StatelessWidget {
         final String base64Str = src!.split(',').last;
         bytes = base64Decode(base64Str);
       } catch (e) {
-        bytes = null; // If decoding fails, fallback to icon
+        bytes = null; 
       }
     }
     return Stack(
@@ -35,7 +34,8 @@ class NetworkImg extends StatelessWidget {
         bytes != null
             ? Image.memory(
                 bytes,
-                fit: BoxFit.contain,
+                fit: BoxFit.cover,
+                width: width,
                 height: height,
               )
             : Image.network(
@@ -71,8 +71,8 @@ class NetworkImg extends StatelessWidget {
         // only show badge if it's non-null and non-empty
         if (badge != null && badge!.isNotEmpty)
           Positioned(
-            top: 8,
-            left: 8,
+            top:  4,
+            left: 4,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
@@ -83,7 +83,7 @@ class NetworkImg extends StatelessWidget {
                 badge!,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
               ),

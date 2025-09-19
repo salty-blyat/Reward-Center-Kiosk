@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:reward_center_kiosk/helpers/storage.dart';
-import 'package:reward_center_kiosk/route.dart';
 import 'package:reward_center_kiosk/util/const.dart';
 import 'package:reward_center_kiosk/util/theme.dart';
 
@@ -14,10 +12,10 @@ class Modal {
         shape: RoundedRectangleBorder(
           borderRadius: AppTheme.borderRadius,
         ),
-        child: SizedBox(
-          height: 500,
-          width: 490,
-          child: Column(
+        child: SizedBox( 
+          height: 350,
+          width: 400,
+          child: Column( 
             children: [
               // Header Row
               Row(
@@ -33,10 +31,10 @@ class Modal {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(32),
+                    padding: const EdgeInsets.all(16),
                     child: Text(
                       'Language'.tr,
-                      style: Get.textTheme.displayMedium?.copyWith(color:Colors.black),
+                      style: Get.textTheme.titleSmall?.copyWith(color:Colors.black),
                     ),
                   ),
                   dismissable
@@ -52,8 +50,7 @@ class Modal {
                         )
                       : const SizedBox.shrink(),
                 ],
-              ),
-              const SizedBox(height: 10),
+              ), 
               // Scrollable ListView
               Expanded(
                 child: ListView.separated(
@@ -66,7 +63,7 @@ class Modal {
                     final isSelected =
                         Get.locale?.languageCode == language['code'];
                     return ListTile(
-                      minTileHeight: 84,
+                      minTileHeight: 64,
                       selected: isSelected,
                       selectedColor: AppTheme.primaryColor,
                       shape: RoundedRectangleBorder(
@@ -79,7 +76,7 @@ class Modal {
                         ),
                       ),
                       trailing: Icon(CupertinoIcons.checkmark_circle,
-                          size: 48,
+                          size: 42,
                           color: isSelected
                               ? AppTheme.primaryColor
                               : Colors.transparent),
@@ -90,17 +87,15 @@ class Modal {
                       leading: Image.asset(
                         language['image'] ??
                             'assets/default.png', // Fallback image
-                        width:  52,
-                        height: 52,
+                        width:  42,
+                        height: 42,
                         fit: BoxFit.cover,
                       ),
                       onTap: () async {
                         // Handle language selection
                         if (language['key'] != null) {
-                          // var box = Storage();
-                          // box.write(
-                          //     Const.authorized['Lang']!, language['code']);
                           Get.updateLocale(language['key']);
+
                           Get.back();
                         }
                       },

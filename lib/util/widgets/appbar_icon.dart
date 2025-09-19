@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get/route_manager.dart';
 import 'package:reward_center_kiosk/pages/home/home_controller.dart';
 import 'package:reward_center_kiosk/route.dart';
@@ -14,131 +15,135 @@ class AppbarIcon extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
   @override
   Widget build(BuildContext context) {
-
     return AppBar(
       automaticallyImplyLeading: false,
-      title: Row(
-        children: [
-   
-          IconButton(
-            style: IconButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: AppTheme.primaryColor.withOpacity(0.2),
-                  width: 1,
+      title: IntrinsicHeight(
+        child: Row(
+          children: [
+            Transform.flip(
+              flipX: true,
+              child: IconButton(
+                style: IconButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: AppTheme.primaryColor.withOpacity(0.2),
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
-                borderRadius: BorderRadius.circular(16),
+                onPressed: () {
+                  Get.dialog(buildExitDialog());
+                },
+                icon:
+                    const Icon(Icons.exit_to_app_outlined, size: AppTheme.iconMedium),
               ),
             ),
-            onPressed: () {
-              Get.dialog(
-                Dialog(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Container(
-                    width: 450,
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "Exit".tr,
-                          style: const TextStyle(
-                            fontSize: 32,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          "Are you sure you want to exit?".tr,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 24),
-                        ),
-                        const SizedBox(height: 48),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                Get.back(); // close dialog
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 12),
-                                  backgroundColor: AppTheme.dangerColor),
-                              child: const Text("No"),
-                            ),
-                            const SizedBox(
-                              width: 12,
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                Get.back();
-                                Get.offAllNamed(RouteName.home);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 12),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                backgroundColor: AppTheme.primaryColor,
-                              ),
-                              child: Text("Yes".tr),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
-            icon: Icon(Icons.home_outlined, size: 48),
-          ),
-          const SizedBox(width: 16),
-          _buildIcon(
-              routeName: RouteName.member,
-              icon: Icons.person_outline,
-              selectedIcon: Icons.person),
-          const SizedBox(width: 16),
-          _buildIcon(
-              routeName: RouteName.transactionHistory,
-              icon: Icons.monetization_on_outlined,
-              selectedIcon: Icons.monetization_on),
-        ],
+            const SizedBox(width: 2),
+            const VerticalDivider(
+              thickness: 2,
+              color: AppTheme.primaryColor,
+            ),
+            const SizedBox(width: 2),
+            _buildIcon(
+                routeName: RouteName.member,
+                icon: Icons.person_outline,
+                selectedIcon: Icons.person),
+            const SizedBox(width: 16),
+            _buildIcon(
+                routeName: RouteName.transactionHistory,
+                icon: Icons.monetization_on_outlined,
+                selectedIcon: Icons.monetization_on),
+          ],
+        ),
       ),
       actions: [
-              Obx(() => controller.selectedLocation.value != null &&
-                  controller.selectedLocation.value?.name != null
-              ? Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                  margin: const EdgeInsets.only(right: 4),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.location_on_outlined,
-                          size: 24, color: AppTheme.primaryColor),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      Text(
-                          controller.selectedLocation.value?.name ??
-                              "Unknown",
-                          style: Get.textTheme.bodyLarge?.copyWith(
-                              color: AppTheme.primaryColor,
-                              fontWeight: FontWeight.bold))
-                    ],
-                  ),
-                )
-              : const SizedBox.shrink()),
-
+        Obx(() => controller.selectedLocation.value != null &&
+                controller.selectedLocation.value?.name != null
+            ? Container(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                margin: const EdgeInsets.only(right: 4),
+                child: Row(
+                  children: [
+                    const Icon(Icons.location_on_outlined,
+                        size: 20, color: AppTheme.primaryColor),
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    Text(controller.selectedLocation.value?.name ?? "Unknown",
+                        style: Get.textTheme.bodyMedium?.copyWith(
+                            color: AppTheme.primaryColor,
+                            fontWeight: FontWeight.bold))
+                  ],
+                ),
+              )
+            : const SizedBox.shrink()),
         const SizedBox(width: 16),
         const Padding(
             padding: EdgeInsets.fromLTRB(0, 4, 16, 4), child: SwitchLanguage())
       ],
     );
   }
+}
+
+Dialog buildExitDialog() {
+  return Dialog(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Container(
+      width: 400,
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            "Exit".tr,
+            style: 
+            Get.textTheme.titleSmall,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            "Are you sure you want to exit?".tr,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 24),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Get.back(); 
+                },
+                style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    backgroundColor: Colors.white,
+                    side: const BorderSide( color: AppTheme.primaryColor)
+),
+                child:  Text("No".tr , style: Get.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600, color: AppTheme.primaryColor)),
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Get.back();
+                  Get.offAllNamed(RouteName.home);
+                },
+                style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    backgroundColor: AppTheme.dangerColor,
+                     side: const BorderSide( color: AppTheme.dangerColor), 
+                ),
+                child: Text("Yes".tr, style: Get.textTheme.bodyMedium?.copyWith(color: Colors.white, fontWeight: FontWeight.w600),),
+              ),
+            ],
+          )
+        ],
+      ),
+    ),
+  );
 }
 
 Widget _buildIcon(
@@ -163,6 +168,6 @@ Widget _buildIcon(
       ),
     ),
     onPressed: () => Get.toNamed(routeName),
-    icon: Icon(isCurrent ? selectedIcon : icon, size: 48),
+    icon: Icon(isCurrent ? selectedIcon : icon, size: AppTheme.iconMedium),
   );
 }

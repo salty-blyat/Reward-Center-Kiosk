@@ -20,8 +20,8 @@ class TransactionHistoryScreen extends StatelessWidget {
       await controller.search();
     });
     return Scaffold(
-        appBar:   PreferredSize(
-          preferredSize: Size.fromHeight(84),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(84),
           child: AppbarIcon(),
         ),
         body: Container(
@@ -33,7 +33,7 @@ class TransactionHistoryScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 12),
                 child: Text('Transaction History'.tr,
                      style: const TextStyle(
-                        fontSize: 24, fontWeight: FontWeight.bold))),
+                        fontSize: 24 ,fontWeight: FontWeight.w600))),
             const SizedBox(height: 16),
             Expanded(child: Obx(() {
               if (controller.loading.value) {
@@ -98,7 +98,7 @@ Widget _transaction(TransactionModel transaction) {
                 Text(
                   // '${transaction.amount?.toStringAsFixed(0) ?? 0} pts',
                   '${transaction.point ?? 0} pts',
-                  style: Get.textTheme.bodyLarge?.copyWith(
+                  style: Get.textTheme.bodyMedium?.copyWith(
                     color: transaction.point != null
                         ? transaction.point! > 0
                             ? AppTheme.successColor

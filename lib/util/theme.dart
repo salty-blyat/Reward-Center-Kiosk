@@ -42,16 +42,14 @@ static const double iconLarge = 48;
 
       // Text theme
         textTheme: TextTheme(
-        displayLarge: style.copyWith(
-          fontSize: 48.0,
-        ),
+
+        displayLarge: style.copyWith(fontSize: 48.0),
         displayMedium: style.copyWith(fontSize: 32.0),
         displaySmall: style.copyWith(fontSize: 24.0),
 
         titleLarge: style.copyWith(
           fontSize: 56.0,
-          color: Colors.black
-         ),
+          color: Colors.black),
         titleMedium: style.copyWith(
           fontSize: 36.0,
           color: Colors.black,

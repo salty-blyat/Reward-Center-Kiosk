@@ -13,8 +13,8 @@ class SwitchLanguage extends StatelessWidget {
     return GestureDetector(
       onTap: () => Modal.showLanguageDialog(),
       child: Image.asset(currentLocale['image'] ?? 'assets/default.png',
-          width:  52, 
-          height: 52, fit: BoxFit.cover),
+          width:  42, 
+          height: 42, fit: BoxFit.cover),
     );
   }
 }
