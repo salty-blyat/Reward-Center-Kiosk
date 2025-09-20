@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
+import 'package:reward_center_kiosk/app_setting.dart';
 import 'package:reward_center_kiosk/route.dart';
 
 class InActiveController extends GetxController {
   late Timer _timer;
-  int deadline = 10;
+  int deadline = AppSetting.setting['Inactive_After'];
   @override
   void onInit() {
     super.onInit();
@@ -14,21 +15,21 @@ class InActiveController extends GetxController {
 
   void _startTimer() {
     //  if (_timer != null && _timer!.isActive) return;
-    print('init timerr');
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      print('timer $timer');
-      if (deadline == 0) {
-        extendDeadline();
-        kickUserOut();
-      } else {
-        deadline--;
+      if (Get.currentRoute != RouteName.home) {
+        if (deadline == 0) {
+          extendDeadline();
+          kickUserOut();
+        } else {
+          deadline--;
+        }
       }
-      print('deadline $deadline');
+      print('timer $deadline');
     });
   }
 
   void extendDeadline() {
-    deadline = 10;
+    deadline = AppSetting.setting['Inactive_After'];
   }
 
   void kickUserOut() {

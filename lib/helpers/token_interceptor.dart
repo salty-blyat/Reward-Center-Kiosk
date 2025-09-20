@@ -99,18 +99,29 @@ class DioClient {  final Dio dio = Dio();
     }
   }
 
-  String _getResponseMessage(DioException e) {
-    if (e.response?.data['args'] != null) {
-      String messageTemplate = e.response!.data['message'].toString().tr;
-      Map<String, dynamic> args = e.response!.data['args'];
+ String _getResponseMessage(DioException e) {
+    try {
+      final data = e.response?.data;
 
-      args.forEach((key, value) {
-        String placeholder = '{{$key}}';
-        messageTemplate =
-            messageTemplate.replaceAll(placeholder, value.toString());
-      });
-      return messageTemplate;
+      if (data is Map<String, dynamic>) { 
+        String messageTemplate =
+            data['message']?.toString().tr ?? 'Unknown error';
+ 
+        final args = data['args'];
+        if (args is Map<String, dynamic>) {
+          args.forEach((key, value) {
+            final placeholder = '{{$key}}';
+            messageTemplate =
+                messageTemplate.replaceAll(placeholder, value.toString());
+          });
+        }
+        return messageTemplate;
+      }
+ 
+      return e.message ?? 'Unknown error';
+    } catch (err) { 
+      return e.message ?? 'Unexpected error';
     }
-    return e.response?.data['message'].toString().tr ?? '';
   }
+
 }

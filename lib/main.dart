@@ -19,12 +19,14 @@ Future<void> main() async {
   final Translate translationService = Translate();
   await translationService.loadTranslations();
   var initialRoute = RouteName.home;
-  
-  Get.put(InActiveController(),permanent: true);
- 
-  runApp(InactiveDetector(
-      child: MyApp(
-          translationService: translationService, initialRoute: initialRoute)));
+
+  // Get.put(InActiveController(), permanent: true);
+
+  // runApp(InactiveDetector(
+  //     child: MyApp(
+  //         translationService: translationService, initialRoute: initialRoute)));
+
+  runApp(MyApp(translationService: translationService, initialRoute: initialRoute));
 }
 
 class MyApp extends StatelessWidget {

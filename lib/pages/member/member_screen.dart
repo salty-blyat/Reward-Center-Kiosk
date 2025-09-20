@@ -14,6 +14,7 @@ import 'package:reward_center_kiosk/util/widgets/button.dart';
 import 'package:reward_center_kiosk/util/widgets/loading.dart';
 import 'package:reward_center_kiosk/util/widgets/network_img.dart';
 import 'package:reward_center_kiosk/util/widgets/not_found.dart';
+import 'package:reward_center_kiosk/util/widgets/player_class_badge.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class MemberScreen extends StatelessWidget {
@@ -24,7 +25,7 @@ class MemberScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.onInit();
-    }); 
+    });
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(84),
@@ -122,7 +123,7 @@ Widget _buildOffer(OfferModel offer) {
                   label: 'Redeem'.tr,
                   fontSize: 16,
                   onPressed: () {
-                    Get.toNamed(RouteName.redemptionOp);
+                    Get.toNamed(RouteName.redemptionOp, arguments: {"gift": offer});
                   }),
             ),
           )
@@ -132,7 +133,7 @@ Widget _buildOffer(OfferModel offer) {
 
 Widget _buildProfile() {
   final MemberController controller = Get.put(MemberController());
- 
+
   return Obx(() {
     return Skeletonizer(
         enabled: controller.isLoading.isTrue,
@@ -158,29 +159,7 @@ Widget _buildProfile() {
                       const SizedBox(
                         height: 12,
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 4),
-                        decoration: BoxDecoration(
-                            color: AppTheme.primaryColor,
-                            borderRadius: BorderRadius.circular(8)),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.star_outline,
-                              color: Colors.white,
-                              size: 14,
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Text(controller.member.value.playerClassName ?? '-',
-                                style: Get.textTheme.bodySmall?.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold))
-                          ],
-                        ),
-                      ),
+                      PlayerClassBadge(playerClass: controller.member.value.playerClassName ?? '-')
                     ],
                   ),
                   const SizedBox(
@@ -215,55 +194,57 @@ Widget _buildProfile() {
                               subtitle: "Earned Today"),
                         ],
                       ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          _buildInfoChunk(
+                              icon: Icons.person_2_outlined,
+                              title: "Junket Name",
+                              child: Text(
+                                controller.member.value.junketName ?? '-',
+                                style: Get.textTheme.bodyMedium?.copyWith(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold),
+                              )),
+                          const SizedBox(width: 48),
+                          _buildInfoChunk(
+                              icon: Icons.access_time_rounded,
+                              title: "Last Seen",
+                              child: Text(
+                                Const.prettyDate(
+                                    controller.member.value.lastSeenAt ??
+                                        DateTime.now()),
+                                style: Get.textTheme.bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              )),
+                        ],
+                      )
                     ],
                   )
                 ],
               ),
-              const SizedBox(height: 32),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildInfoChunk(
-                      icon: Icons.person_2_outlined,
-                      title: "Junket Name",
-                      child: Text(
-                        controller.member.value.junketName ?? '-',
-                        style: Get.textTheme.bodyMedium?.copyWith(
-                            color: Colors.black, fontWeight: FontWeight.bold),
-                      )),
-                  const SizedBox(width: 48), 
-                  _buildInfoChunk(
-                      icon: Icons.access_time_rounded,
-                      title: "Last Seen",
-                      child: Text(
-                        Const.prettyDate(controller.member.value.lastSeenAt ??
-                            DateTime.now()),
-                        style: Get.textTheme.bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      )), 
-                ],
-              )
             ],
           ),
         ));
   });
 }
 
+
 Widget _buildCard(
     {required IconData icon, required String title, required String subtitle}) {
   return Container(
-    height: 140,
+    height: 120,
     width: 180,
     padding: const EdgeInsets.all(24),
     decoration: BoxDecoration(
-      color: Colors.white, 
+      color: Colors.white,
       borderRadius: BorderRadius.circular(12),
       boxShadow: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.1),  
-          spreadRadius: 2,  
-          blurRadius: 8, 
-          offset: const Offset(0, 4),  
+          color: Colors.black.withOpacity(0.1),
+          spreadRadius: 2,
+          blurRadius: 8,
+          offset: const Offset(0, 4),
         ),
       ],
     ),
@@ -274,10 +255,10 @@ Widget _buildCard(
       ),
       Text(
         title,
-        style: Get.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
+        style: Get.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
       ),
       Text(subtitle,
-          style: TextStyle(color: AppTheme.defaultColor, fontSize: 14)),
+          style: const TextStyle(color: AppTheme.defaultColor, fontSize: 14)),
     ]),
   );
 }
@@ -307,21 +288,3 @@ Widget _buildInfoChunk(
     ],
   );
 }
-
-// Widget infoRow({
-//   required IconData icon,
-//   required String text,
-//   double iconSize = 24,
-//   double fontSize = 24,
-// }) {
-//   return Row(
-//     children: [
-//       Icon(icon, size: iconSize, color: AppTheme.defaultColor),
-//       const SizedBox(width: 12),
-//       Text(
-//         text,
-//         style: TextStyle(fontSize: fontSize, color: AppTheme.defaultColor),
-//       ),
-//     ],
-//   );
-// }

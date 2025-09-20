@@ -8,24 +8,24 @@ import 'package:reward_center_kiosk/model/transaction_model.dart';
 import 'package:reward_center_kiosk/pages/transaction_history/transaction_history_service.dart';
 
 enum TransactionTypeEnum {
-  open,
-  fill,
-  credit,
-  drop,
-  count,
-  update,
-  close,
+  adjust,
+  topup,
+  order,
+  earn,
+  redeem,
+  reverse,
+  expired
 }
 
 extension TransactionTypeEnumExtension on TransactionTypeEnum {
   static const Map<TransactionTypeEnum, int> _values = {
-    TransactionTypeEnum.open: 1,
-    TransactionTypeEnum.fill: 2,
-    TransactionTypeEnum.credit: 3,
-    TransactionTypeEnum.drop: 4,
-    TransactionTypeEnum.count: 5,
-    TransactionTypeEnum.update: 6,
-    TransactionTypeEnum.close: 7,
+    TransactionTypeEnum.adjust: 1,
+    TransactionTypeEnum.topup: 101,
+    TransactionTypeEnum.order: 102,
+    TransactionTypeEnum.earn: 201,
+    TransactionTypeEnum.redeem: 202,
+    TransactionTypeEnum.reverse: 203,
+    TransactionTypeEnum.expired: 204,
   };
 
   int get value => _values[this]!;
@@ -60,7 +60,7 @@ class TransactionHistoryController extends GetxController {
   }
 
   Future<MemberModel> loadCurrentMember() async {
-    final data = await storage.read("member");
+    final data = await storage.read(StorageKeys.member);
     final Map<String, dynamic> map = jsonDecode(data as String);
     return MemberModel.fromJson(map);
   }

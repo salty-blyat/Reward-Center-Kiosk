@@ -3,8 +3,56 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reward_center_kiosk/util/const.dart';
 import 'package:reward_center_kiosk/util/theme.dart';
+import 'package:reward_center_kiosk/util/widgets/button.dart';
 
 class Modal {
+   static successDialog(String title, String message) {
+    Get.dialog(
+      Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: SizedBox(
+          height: 250,
+          width: 350,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    const SizedBox(height: 12),
+                    const Icon(CupertinoIcons.checkmark_circle,
+                        size: 70, color: AppTheme.successColor),
+                    const SizedBox(height: 10),
+                    Text(
+                      title.tr,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(message.tr),
+                  ],
+                ),
+                MyButton(
+                  padding: const EdgeInsets.all(8),
+                  label: 'OK'.tr,
+                  fontSize: 18,
+                  onPressed: () {
+                    Navigator.of(Get.context!).pop();
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+  
   static showLanguageDialog({bool dismissable = true}) {
     Get.dialog(
       barrierDismissible: dismissable,

@@ -1,6 +1,13 @@
 import 'dart:io';
 import 'dart:convert';
 
+
+class StorageKeys{
+  static String member = "member";
+  static String  selectedLocation= "selected_location";
+  static String company = "company";
+}
+
 class InMemoryStorage {
   static final InMemoryStorage _instance = InMemoryStorage._();
   InMemoryStorage._();

@@ -71,7 +71,7 @@ class AppbarIcon extends StatelessWidget implements PreferredSizeWidget {
                       width: 4,
                     ),
                     Text(controller.selectedLocation.value?.name ?? "Unknown",
-                        style: Get.textTheme.bodyMedium?.copyWith(
+                        style: Get.textTheme.bodyLarge?.copyWith(
                             color: AppTheme.primaryColor,
                             fontWeight: FontWeight.bold))
                   ],

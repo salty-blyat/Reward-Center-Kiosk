@@ -38,35 +38,28 @@ class NetworkImg extends StatelessWidget {
                 width: width,
                 height: height,
               )
-            : Image.network(
-                src ?? '',
-                height: height,
-                width: width,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Container(
+            : (src != null && src!.isNotEmpty
+                ? Image.network(
+                    src!,
                     height: height,
                     width: width,
-                    color: Colors.grey[300],
-                    child: const Center(
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    ),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    height: height,
-                    width: width,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      // borderRadius: const BorderRadius.only(
-                      //     topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-                    ),
-                    child: const Icon(Icons.image, color: Colors.grey),
-                  );
-                },
-              ),
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Container(
+                        height: height,
+                        width: width,
+                        color: Colors.grey[300],
+                        child: const Center(
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return _placeholder(height, width);
+                    },
+                  )
+                : _placeholder(height, width)),
 
         // only show badge if it's non-null and non-empty
         if (badge != null && badge!.isNotEmpty)
@@ -92,4 +85,12 @@ class NetworkImg extends StatelessWidget {
       ],
     );
   }
+}
+Widget _placeholder(double? height, double? width) {
+  return Container(
+    height: height,
+    width: width,
+    color: Colors.grey[300],
+    child: const Icon(Icons.image_not_supported, color: Colors.grey),
+  );
 }

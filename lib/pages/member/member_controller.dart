@@ -52,7 +52,9 @@ class MemberController extends GetxController {
     }
   }
 
+
   Future<void> find(String id) async {
+    // by card
     isLoading.value = true;
     try {
       final response = await service.findByCard(id);
@@ -64,6 +66,19 @@ class MemberController extends GetxController {
       isLoading.value = false;
     }
   }
+
+// Future<void> findById(String id) async {
+//     isLoading.value = true;
+//     try {
+//       final response = await service.findByCard(id);
+//       await setMemberData(response);
+//       member.value = response;
+//     } catch (e) {
+//       isLoading.value = false;
+//     } finally {
+//       isLoading.value = false;
+//     }
+//   }
 
   Future<bool> checkExistUser(String id) async {
     try {
@@ -79,6 +94,6 @@ class MemberController extends GetxController {
   }
 
   Future<void> setMemberData(MemberModel model) async {
-    await storage.write("member", jsonEncode(model.toJson()));
+    await storage.write(StorageKeys.member, jsonEncode(model.toJson()));
   }
 }

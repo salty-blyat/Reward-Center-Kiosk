@@ -10,19 +10,19 @@ class MyButton extends StatelessWidget {
   final bool disabled;
   final Color? color;
   final Color? textColor;
-  final double? padding;
+  final EdgeInsets? padding;
   final double? fontSize;
 
   const MyButton(
       {super.key,
       required this.label,
       required this.onPressed,
-      this.disabled = false,
       this.loading = false,
+      this.disabled = false,
       this.icon,
       this.color,
       this.textColor,
-      this.padding = 0,
+      this.padding = const EdgeInsets.all(0) ,
       this.fontSize = 32});
 
   @override
@@ -30,7 +30,7 @@ class MyButton extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         textStyle: AppTheme.style.copyWith(fontSize: fontSize),
-        padding: EdgeInsets.symmetric(vertical: padding!), 
+        padding: padding, 
         // minimumSize: const Size(double.infinity, 24),
         backgroundColor: disabled
             ? Theme.of(context).disabledColor

@@ -54,7 +54,7 @@ class HomeController extends GetxController {
   }
 
   Future<LocationModel?> loadSelectedLocation() async {
-    final data = await storage.read("selected_location");
+    final data = await storage.read(StorageKeys.selectedLocation);
 
     if (data == null) return null;
     if (data is String) {
@@ -73,7 +73,7 @@ class HomeController extends GetxController {
   }
 
   Future<CompanyModel> loadCompanyFromStorage() async {
-    String model = await storage.read("company");
+    String model = await storage.read(StorageKeys.company);
     if(model.isEmpty){
       return CompanyModel();
     } 

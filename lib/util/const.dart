@@ -9,6 +9,7 @@ class Const {
   static String numberFormat(double value) {
     return NumberFormat('###.##').format(value);
   }
+
   static String formatCardNumber(String cardNumber) {
     return cardNumber
         .replaceAllMapped(
@@ -17,23 +18,29 @@ class Const {
         )
         .trim();
   }
-
+static formatCurrency(dynamic amount, {bool isPoint = true}) {
+    if (isPoint) {
+      return '${NumberFormat('#,##0.##', 'en_US').format(amount)} pts';
+    }
+    return '\$ ${NumberFormat('#,##0.00', 'en_US').format(amount)}';
+  }
 
   static String getTransType(int tran) {
-    if (tran == TransactionTypeEnum.open.value) {
-      return "Open";
-    } else if (tran == TransactionTypeEnum.fill.value) {
-      return "Fill";
-    } else if (tran == TransactionTypeEnum.credit.value) {
-      return "Credit";
-    } else if (tran == TransactionTypeEnum.drop.value) {
-      return "Drop";
-    } else if (tran == TransactionTypeEnum.count.value) {
-      return "Count";
-    } else if (tran == TransactionTypeEnum.update.value) {
-      return "Update";
-    } else if (tran == TransactionTypeEnum.close.value) {
-      return "Close";
+    print('tran $tran');
+    if (tran == TransactionTypeEnum.adjust.value) {
+      return "Adjust";
+    } else if (tran == TransactionTypeEnum.topup.value) {
+      return "Topup";
+    } else if (tran == TransactionTypeEnum.order.value) {
+      return "Order";
+    } else if (tran == TransactionTypeEnum.earn.value) {
+      return "Earn";
+    } else if (tran == TransactionTypeEnum.redeem.value) {
+      return "Redeem";
+    } else if (tran == TransactionTypeEnum.reverse.value) {
+      return "Reverse";
+    } else if (tran == TransactionTypeEnum.expired.value) {
+      return "Expired";
     } else {
       return "Transaction Type Not found";
     }
@@ -44,7 +51,7 @@ class Const {
     return DateFormat('dd-MM-yyyy HH:mm').format(dateTime.toLocal());
   }
 
-   static String prettyDate(DateTime dateTime) {
+  static String prettyDate(DateTime dateTime) {
     final now = DateTime.now();
     final diff = now.difference(dateTime);
 

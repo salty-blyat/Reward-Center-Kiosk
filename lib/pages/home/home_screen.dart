@@ -39,9 +39,9 @@ class HomeScreen extends StatelessWidget {
                       Text(
                           homeController.selectedLocation.value?.name ??
                               "Unknown",
-                          style: Get.textTheme.bodyMedium?.copyWith(
-                              color: AppTheme.primaryColor,
-                              fontWeight: FontWeight.bold))
+                          style: Get.textTheme.bodyLarge?.copyWith(
+                            color: AppTheme.primaryColor,
+                            fontWeight: FontWeight.bold) )
                     ],
                   ),
                 )
@@ -118,7 +118,8 @@ class HomeScreen extends StatelessWidget {
                             //     .toString()), // for debugging
                             // Text(controller.cardNumberText.value),  // for debugging
                             Offstage(
-                              child: TextField(
+                              child:
+                               TextField(
                                 controller: controller.cardNumber,
                                 focusNode: controller.focusNode,
                                 keyboardType: TextInputType.none,
@@ -241,7 +242,11 @@ Widget _buildLocationDialog() {
                         ),
                         title: Text(
                           location.name ?? 'Unknown',
-                          style: const TextStyle(fontSize: 24),
+                          style: Get.textTheme.bodyLarge?.copyWith(
+                            color: isSelected
+                                  ? AppTheme.primaryColor
+                                  : AppTheme.defaultColor,
+                            ),
                           // style: Get.textTheme.bodyLarge,
                         ),
                         onTap: ()  async {

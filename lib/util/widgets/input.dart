@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart'; 
 import 'package:reactive_forms/reactive_forms.dart';
 
 class MyFormField<T> extends StatelessWidget {
-  final String label;
+  final String? label;
   final IconData? icon;
   final bool disabled;
   final bool password;
   final String? Function(String?)? validator;
   final TextEditingController? controller;
-  final int? maxLines;
+  final int? maxLines; 
   final String? controlName;
   final bool enableSuggestions;
+  final TextAlign? textAlign;
   final TextInputType textInputType;
   final bool Function(AbstractControl<dynamic> control)? showErrors;
   final void Function(FormControl<T>)? onChanged;
@@ -19,14 +20,15 @@ class MyFormField<T> extends StatelessWidget {
 
   const MyFormField(
       {super.key,
-      required this.label,
+        this.label,
       this.icon,
       this.textInputType = TextInputType.text,
       this.disabled = false,
       this.password = false,
+      this.textAlign ,
       this.validator,
       this.controller,
-      this.maxLines = 1,
+      this.maxLines = 1, 
       this.controlName,
       this.enableSuggestions = false,
       this.showErrors,
@@ -47,7 +49,8 @@ class MyFormField<T> extends StatelessWidget {
       BuildContext context, RxBool isPasswordVisible, RxBool isDisabled) {
     return SizedBox(
       height: 72,
-      child: ReactiveTextField<T>(
+      child: ReactiveTextField<T>( 
+        textAlign: textAlign ?? TextAlign.left,
         textAlignVertical: TextAlignVertical.bottom,
         maxLines: password ? 1 : maxLines,
         controller: controller,
@@ -61,13 +64,16 @@ class MyFormField<T> extends StatelessWidget {
         enableSuggestions: enableSuggestions,
         autocorrect: false,
         showErrors: showErrors,
-        onChanged: onChanged,
+        onChanged: onChanged, 
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
+          contentPadding: const EdgeInsets.all(4),
+          border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.zero)),
           prefixIconConstraints: const BoxConstraints(
             maxWidth: 48,
             maxHeight: 48,
-          ),
+          ),    isDense: true,   errorMaxLines: 1, 
+          helperText: '', 
           prefixIcon: icon != null
               ? Padding(
                   padding: const EdgeInsets.only(left: 12, right: 4),
@@ -77,16 +83,16 @@ class MyFormField<T> extends StatelessWidget {
                           isDisabled.value ? Colors.grey[600] : Colors.black87),
                 )
               : null,
-          labelText: label.tr,
+          labelText: (label != null && label!.isNotEmpty) ? label?.tr : null, 
           labelStyle: context.textTheme.bodyMedium!.copyWith(
             color: Colors.black,
             fontWeight: FontWeight.normal,
           ),
-          filled: isDisabled.value,
+          filled: true,
           helperStyle: const TextStyle(height: 0.8),
           errorStyle: const TextStyle(height: 0.8),
 
-          fillColor: isDisabled.value ? Colors.grey[200] : null,
+          fillColor:   Colors.white,
           // prefixIconColor: isDisabled.value ? Colors.grey[600] : null,
           suffixIcon: password
               ? IconButton(

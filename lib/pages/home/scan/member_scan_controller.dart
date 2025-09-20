@@ -36,7 +36,7 @@ class MemberScanController extends GetxController {
   final MemberController memberController = Get.put(MemberController());
   final FocusNode focusNode = FocusNode();
   final cardNumber = TextEditingController();
-  final InActiveController inActiveController = Get.find<InActiveController>();
+  // final InActiveController inActiveController = Get.find<InActiveController>();
   final cardNumberText = ''.obs;
   final isLoadingCard = false.obs;
   final cardStatus = ScanCardStatus.start.obs;
@@ -45,12 +45,13 @@ class MemberScanController extends GetxController {
   @override
   void onInit() {
     timer = Timer.periodic(const Duration(seconds: 3), (_) {
-      if (!focusNode.hasFocus) {
+      if (!focusNode.hasFocus && Get.currentRoute == RouteName.home) {
+        print("req input");
         focusNode.requestFocus();
       }
     });
 
-    Future.delayed(const Duration(milliseconds: 300), () {
+    Future.delayed(const Duration(milliseconds: 200), () {
       focusNode.requestFocus();
     });
     cardNumber.addListener(() {
@@ -58,7 +59,7 @@ class MemberScanController extends GetxController {
     });
 
     debounce<String>(cardNumberText, (val) async {
-      inActiveController.extendDeadline();
+      // inActiveController.extendDeadline();
       cardNumberText.value = val;
 
       if (cardNumberText.value.isNotEmpty) {
@@ -66,7 +67,7 @@ class MemberScanController extends GetxController {
           cardStatus.value = ScanCardStatus.processing;
           // await Future.delayed(const Duration(milliseconds: 500));
 
-          final selectedLocation =  await homeController.loadSelectedLocation();
+          final selectedLocation = await homeController.loadSelectedLocation();
           print("selected location $selectedLocation");
           if (selectedLocation == null) {
             if (!Get.isDialogOpen!) {
@@ -78,7 +79,8 @@ class MemberScanController extends GetxController {
             focusNode.requestFocus();
             return;
           }
-          bool exist = await memberController.checkExistUser(cardNumberText.value);
+          bool exist =
+              await memberController.checkExistUser(cardNumberText.value);
           if (!exist) {
             cardNumber.clear();
             cardNumberText.value = '';
@@ -89,9 +91,7 @@ class MemberScanController extends GetxController {
             return;
           }
 
-          
           cardStatus.value = ScanCardStatus.found;
-          
           // await Future.delayed(const Duration(milliseconds: 500));
 
           Get.toNamed(RouteName.member,
@@ -110,9 +110,9 @@ class MemberScanController extends GetxController {
           focusNode.requestFocus();
         }
       }
-    }, time: const Duration(milliseconds: 500));
+    }, time: const Duration(milliseconds: 200));
 
-    0per.onInit();
+    super.onInit();
   }
 
   void dispose() {
