@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:reward_center_kiosk/helpers/storage.dart';
 import 'package:reward_center_kiosk/model/location_model.dart';
 import 'package:reward_center_kiosk/pages/home/home_controller.dart';
 import 'package:reward_center_kiosk/pages/home/scan/member_scan_controller.dart';
@@ -40,8 +41,8 @@ class HomeScreen extends StatelessWidget {
                           homeController.selectedLocation.value?.name ??
                               "Unknown",
                           style: Get.textTheme.bodyLarge?.copyWith(
-                            color: AppTheme.primaryColor,
-                            fontWeight: FontWeight.bold) )
+                              color: AppTheme.primaryColor,
+                              fontWeight: FontWeight.bold))
                     ],
                   ),
                 )
@@ -214,7 +215,7 @@ Widget _buildLocationDialog() {
                 final location = controller.locations[index];
 
                return FutureBuilder(
-                    future: controller.loadSelectedLocation(),
+                    future:   controller.storage.loadDataAsync(StorageKeys.selectedLocation, LocationModel.fromJson),
                     builder: (context, snapshot) {
                       final selectedLocation = snapshot.data;
                       final isSelected = selectedLocation != null &&
@@ -242,16 +243,12 @@ Widget _buildLocationDialog() {
                         ),
                         title: Text(
                           location.name ?? 'Unknown',
-                          style: Get.textTheme.bodyLarge?.copyWith(
-                            color: isSelected
-                                  ? AppTheme.primaryColor
-                                  : AppTheme.defaultColor,
-                            ),
+                          style: const TextStyle(fontSize: 24),
                           // style: Get.textTheme.bodyLarge,
                         ),
                         onTap: ()  async {
                          await controller.saveLocation(location);
-                         await controller.loadSelectedLocation();
+                         controller.selectedLocation.value =   await controller.storage.loadDataAsync(StorageKeys.selectedLocation, LocationModel.fromJson);
                           Get.back();
                         },
                       );

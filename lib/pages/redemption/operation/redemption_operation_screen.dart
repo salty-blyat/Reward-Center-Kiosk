@@ -11,6 +11,7 @@ import 'package:reward_center_kiosk/util/widgets/appbar_icon.dart';
 import 'package:reward_center_kiosk/util/widgets/avartar.dart';
 import 'package:reward_center_kiosk/util/widgets/button.dart';
 import 'package:reward_center_kiosk/util/widgets/input.dart';
+import 'package:reward_center_kiosk/util/widgets/loading.dart';
 import 'package:reward_center_kiosk/util/widgets/network_img.dart';
 import 'package:reward_center_kiosk/util/widgets/player_class_badge.dart';
 
@@ -37,21 +38,32 @@ class RedemptionOperationScreen extends StatelessWidget {
               formGroup: controller.formGroup,
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Processing redemption'.tr,
-                          style: const TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.w600)),
-                      const SizedBox(height: 32),
-                      _buildMemberInfo(),
-                      const SizedBox(height: 32),
-                      _buildGift(),
-                      const SizedBox(height: 32),
-                      _buildTranSummary(),
-                      const SizedBox(height: 32),
-                      _buildActionButton()
-                    ]),
+                child: Obx(
+                  () {
+                    if (controller.loading.value == true) {
+                      return const Column(
+                        children: [
+                          Center(child: Loading()),
+                        ],
+                      );
+                    }
+                    return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Processing redemption'.tr,
+                              style: const TextStyle(
+                                  fontSize: 24, fontWeight: FontWeight.w600)),
+                          const SizedBox(height: 32),
+                          _buildMemberInfo(),
+                          const SizedBox(height: 32),
+                          _buildGift(),
+                          const SizedBox(height: 32),
+                          _buildTranSummary(),
+                          const SizedBox(height: 48),
+                          _buildActionButton()
+                        ]);
+                  },
+                ),
               ),
             ),
           ),
@@ -64,16 +76,7 @@ class RedemptionOperationScreen extends StatelessWidget {
     final MemberController memberController = Get.find<MemberController>();
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        MyButton(
-            color: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            textColor: AppTheme.defaultColor,
-            label: "Cancel".tr,
-            fontSize: 24,
-            onPressed: () => Get.back()),
-        const SizedBox(width: 32),
         ReactiveFormConsumer(builder: (context, form, child) {
           final remainingPoints = memberController.member.value.point! -
               controller.formGroup.control('totalPoint').value;
@@ -81,10 +84,18 @@ class RedemptionOperationScreen extends StatelessWidget {
           return MyButton(
               label: 'Redeem',
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              fontSize: 24,
+              fontSize: 32,
               disabled: remainingPoints < 0 || !form.valid,
               onPressed: () async => await controller.submit());
-        })
+        }),
+        const SizedBox(width: 32),
+        MyButton(
+            color: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            textColor: AppTheme.defaultColor,
+            label: "Cancel".tr,
+            fontSize: 32,
+            onPressed: () => Get.back()),
       ],
     );
   }
@@ -93,32 +104,33 @@ class RedemptionOperationScreen extends StatelessWidget {
     final RedemptionController controller = Get.find<RedemptionController>();
     return Obx(() => Container(
           decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                  color: AppTheme.defaultColor.withOpacity(0.2),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4))
-            ],
-            color: Colors.white,
+            color: AppTheme.primaryColor.withOpacity(0.2),
             borderRadius: const BorderRadius.all(Radius.circular(8)),
           ),
           child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            SizedBox(
-              height: 130,
-              width: 130,
-              child: NetworkImg(src: controller.gift.value.image, height: 130),
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                bottomLeft: Radius.circular(8),
+              ),
+              child: SizedBox(
+                height: 150,
+                width: 150,
+                child:
+                    NetworkImg(src: controller.gift.value.image, height: 150),
+              ),
             ),
             Expanded(
               child: Container(
-                padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
+                padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(controller.gift.value.name ?? '-',
                         style: const TextStyle(
-                            fontSize: 28, fontWeight: FontWeight.w500)),
-                    const SizedBox(height: 12),
+                            fontSize: 28, fontWeight: FontWeight.w600)),
+                    const SizedBox(height: 28),
                     Row(
                       children: [
                         Text(
@@ -133,8 +145,6 @@ class RedemptionOperationScreen extends StatelessWidget {
                               builder: (context, form, child) {
                                 return Material(
                                   shape: RoundedRectangleBorder(
-                                    side: const BorderSide(
-                                        width: 1, color: AppTheme.defaultColor),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   color: Colors.white,
@@ -207,15 +217,9 @@ class RedemptionOperationScreen extends StatelessWidget {
     return Obx(() {
       return Container(
         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 12),
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-                color: AppTheme.defaultColor.withOpacity(0.2),
-                blurRadius: 8,
-                offset: const Offset(0, 4))
-          ],
-          color: Colors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
+        decoration: const BoxDecoration(
+          color: Color(0xFFEEEEEE),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,9 +233,11 @@ class RedemptionOperationScreen extends StatelessWidget {
                 value:
                     "${Const.formatCurrency(memberController.member.value.point)}"),
             const SizedBox(height: 12),
-            _buildRowTranSum(
-                title: "Quantity".tr,
-                value: "x${controller.formGroup.control('quantity').value}"),
+            ReactiveFormConsumer(builder: (context, form, child) {
+              return _buildRowTranSum(
+                  title: "Quantity".tr,
+                  value: "x ${form.control('quantity').value}");
+            }),
             const SizedBox(height: 12),
             ReactiveFormConsumer(
               builder: (context, form, child) {
@@ -248,8 +254,9 @@ class RedemptionOperationScreen extends StatelessWidget {
               builder: (context, form, child) {
                 return _buildRowTranSum(
                     title: "Total Cost".tr,
+                    fontWeight: FontWeight.bold,
                     value:
-                        "${Const.formatCurrency(form.control('totalPoint').value)}");
+                        "${Const.formatCurrency(form.control('totalPoint').value)}",);
               },
             ),
             ReactiveFormConsumer(
@@ -260,7 +267,7 @@ class RedemptionOperationScreen extends StatelessWidget {
                     title: "Remaining Points".tr,
                     color: remainingPoints < 0
                         ? AppTheme.dangerColor
-                        : Colors.black,
+                        : Colors.purple,
                     value: "${Const.formatCurrency(remainingPoints)}");
               },
             ),
@@ -271,17 +278,17 @@ class RedemptionOperationScreen extends StatelessWidget {
   }
 
   Widget _buildRowTranSum(
-      {required String title, Color? color, required String value}) {
+      {required String title, Color? color, required String value, FontWeight fontWeight = FontWeight.w500}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          style: const  TextStyle(fontSize: 20 ),
         ),
         Text(
           value,
-          style: TextStyle(fontSize: 20, color: color),
+          style: TextStyle(fontSize: 20, color: color, fontWeight: fontWeight),
         )
       ],
     );
@@ -291,10 +298,10 @@ class RedemptionOperationScreen extends StatelessWidget {
     return Obx(() {
       return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         SizedBox(
-          height: 84,
-          width: 84,
+          height: 96,
+          width: 96,
           child: Avartar(
-            iconSize: 42,
+            iconSize: 48,
             imageUrl: memberController.member.value.photo,
           ),
         ),

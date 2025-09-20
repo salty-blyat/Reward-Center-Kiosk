@@ -1,10 +1,9 @@
 import 'dart:io';
 import 'dart:convert';
 
-
-class StorageKeys{
+class StorageKeys {
   static String member = "member";
-  static String  selectedLocation= "selected_location";
+  static String selectedLocation = "selected_location";
   static String company = "company";
 }
 
@@ -26,6 +25,19 @@ class InMemoryStorage {
   Future<dynamic> read(String key) async {
     final data = await _readFile();
     return data?[key];
+  }
+
+  Future<T?> loadDataAsync<T>(
+      String key, Function(Map<String, dynamic>) fromJson) async {
+    final data = await read(key);
+
+    if (data == null) return null;
+    if (data is String) {
+      final Map<String, dynamic> map = jsonDecode(data);
+      final model = fromJson(map);
+      return model;
+    }
+    return null;
   }
 
   Future<void> delete(String key) async {

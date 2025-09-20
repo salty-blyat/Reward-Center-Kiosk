@@ -22,20 +22,21 @@ class MemberController extends GetxController {
   RxList<OfferModel> listOffer = <OfferModel>[].obs;
   final storage = InMemoryStorage();
 
-  @override
-  void onInit() async {
-    super.onInit();
-    if (Get.arguments != null && Get.arguments['cardNumber'] != null) {
+
+@override
+  void onReady() async {
+     super.onReady();
+     if (Get.arguments != null && Get.arguments['cardNumber'] != null) {
       cardNumber.value = Get.arguments['cardNumber'];
       await find(cardNumber.value);
       await availableOffer();
     }
-  }
+  } 
 
   Future<void> availableOffer() async {
     try {
       isLoadingOffer.value = true;
-      final selectedLocation = await homeController.loadSelectedLocation();
+      final selectedLocation = await storage.loadDataAsync<LocationModel>(StorageKeys.selectedLocation, LocationModel.fromJson);
 
       if (member.value.id == null || selectedLocation?.id == null) {
         print("Member id or location id null");
@@ -52,7 +53,6 @@ class MemberController extends GetxController {
     }
   }
 
-
   Future<void> find(String id) async {
     // by card
     isLoading.value = true;
@@ -65,20 +65,7 @@ class MemberController extends GetxController {
     } finally {
       isLoading.value = false;
     }
-  }
-
-// Future<void> findById(String id) async {
-//     isLoading.value = true;
-//     try {
-//       final response = await service.findByCard(id);
-//       await setMemberData(response);
-//       member.value = response;
-//     } catch (e) {
-//       isLoading.value = false;
-//     } finally {
-//       isLoading.value = false;
-//     }
-//   }
+  } 
 
   Future<bool> checkExistUser(String id) async {
     try {

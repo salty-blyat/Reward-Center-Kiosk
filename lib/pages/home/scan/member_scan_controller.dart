@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reward_center_kiosk/helpers/storage.dart';
+import 'package:reward_center_kiosk/model/location_model.dart';
 import 'package:reward_center_kiosk/pages/home/home_controller.dart';
 import 'package:reward_center_kiosk/pages/member/member_controller.dart';
 import 'package:reward_center_kiosk/route.dart';
@@ -66,8 +67,8 @@ class MemberScanController extends GetxController {
         try {
           cardStatus.value = ScanCardStatus.processing;
           // await Future.delayed(const Duration(milliseconds: 500));
-
-          final selectedLocation = await homeController.loadSelectedLocation();
+ 
+          final selectedLocation = await storage.loadDataAsync<LocationModel>( StorageKeys.selectedLocation, LocationModel.fromJson);
           print("selected location $selectedLocation");
           if (selectedLocation == null) {
             if (!Get.isDialogOpen!) {
@@ -85,20 +86,16 @@ class MemberScanController extends GetxController {
             cardNumber.clear();
             cardNumberText.value = '';
             cardStatus.value = ScanCardStatus.notFound;
-            focusNode.requestFocus();
-            // await Future.delayed(const Duration(seconds: 2));
+            focusNode.requestFocus(); 
             cardStatus.value = ScanCardStatus.start;
             return;
           }
 
-          cardStatus.value = ScanCardStatus.found;
-          // await Future.delayed(const Duration(milliseconds: 500));
-
+          cardStatus.value = ScanCardStatus.found; 
+ 
           Get.toNamed(RouteName.member,
-              arguments: {'cardNumber': cardNumberText.value});
-          print("card number: ${cardNumberText.value}");
-
-          // await Future.delayed(const Duration(milliseconds: 500));
+              arguments: {'cardNumber': cardNumberText.value}); 
+ 
           cardStatus.value = ScanCardStatus.start;
           cardNumberText.value = '';
           cardNumber.clear();

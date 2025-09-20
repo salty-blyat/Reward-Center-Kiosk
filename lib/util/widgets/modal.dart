@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:reactive_forms/reactive_forms.dart';
 import 'package:reward_center_kiosk/util/const.dart';
 import 'package:reward_center_kiosk/util/theme.dart';
 import 'package:reward_center_kiosk/util/widgets/button.dart';
 
 class Modal {
-   static successDialog(String title, String message) {
+  static successDialog(String title, String message, Function() onPressed) {
     Get.dialog(
       Dialog(
         shape: RoundedRectangleBorder(
@@ -41,8 +42,9 @@ class Modal {
                   padding: const EdgeInsets.all(8),
                   label: 'OK'.tr,
                   fontSize: 18,
-                  onPressed: () {
-                    Navigator.of(Get.context!).pop();
+                  onPressed: () async {
+                    Get.back();
+                    await onPressed();
                   },
                 ),
               ],
@@ -52,7 +54,7 @@ class Modal {
       ),
     );
   }
-  
+
   static showLanguageDialog({bool dismissable = true}) {
     Get.dialog(
       barrierDismissible: dismissable,
@@ -60,10 +62,10 @@ class Modal {
         shape: RoundedRectangleBorder(
           borderRadius: AppTheme.borderRadius,
         ),
-        child: SizedBox( 
+        child: SizedBox(
           height: 350,
           width: 400,
-          child: Column( 
+          child: Column(
             children: [
               // Header Row
               Row(
@@ -82,7 +84,8 @@ class Modal {
                     padding: const EdgeInsets.all(16),
                     child: Text(
                       'Language'.tr,
-                      style: Get.textTheme.titleSmall?.copyWith(color:Colors.black),
+                      style: Get.textTheme.titleSmall
+                          ?.copyWith(color: Colors.black),
                     ),
                   ),
                   dismissable
@@ -98,7 +101,7 @@ class Modal {
                         )
                       : const SizedBox.shrink(),
                 ],
-              ), 
+              ),
               // Scrollable ListView
               Expanded(
                 child: ListView.separated(
@@ -135,7 +138,7 @@ class Modal {
                       leading: Image.asset(
                         language['image'] ??
                             'assets/default.png', // Fallback image
-                        width:  42,
+                        width: 42,
                         height: 42,
                         fit: BoxFit.cover,
                       ),
@@ -155,6 +158,80 @@ class Modal {
           ),
         ),
       ),
+    );
+  }
+
+  static Future<String?> passwordDialog() async {
+    final form = FormGroup({
+      'passcode': FormControl<String>(
+        validators: [
+          Validators.required,
+          Validators.pattern(r'^[a-zA-Z0-9]{4}$'),
+        ],
+      ),
+    });
+
+    return Get.dialog<String>(
+      Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Container(
+          width: 450,
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Enter Passcode'.tr,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              ReactiveForm(
+                formGroup: form,
+                child: ReactiveTextField<String>(
+                  formControlName: 'passcode',
+                  obscureText: true,
+                  maxLength: 4,
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                    hintText: '****'.tr,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    counterText: '',
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () => Get.back(result: null),
+                    child: const Text('Cancel'),
+                  ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (form.valid) {
+                        Get.back(result: form.control('passcode').value);
+                      } else {
+                        form.markAllAsTouched();
+                      }
+                    },
+                    child: Text('Submit'.tr),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      barrierDismissible: false,
     );
   }
 

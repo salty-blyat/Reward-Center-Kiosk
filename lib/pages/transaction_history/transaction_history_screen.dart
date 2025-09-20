@@ -32,8 +32,8 @@ class TransactionHistoryScreen extends StatelessWidget {
             Padding(
                 padding: const EdgeInsets.only(left: 12),
                 child: Text('Transaction History'.tr,
-                     style: const TextStyle(
-                        fontSize: 24 ,fontWeight: FontWeight.w600))),
+                    style: const TextStyle(
+                        fontSize: 24, fontWeight: FontWeight.w600))),
             const SizedBox(height: 16),
             Expanded(child: Obx(() {
               if (controller.loading.value) {
@@ -84,7 +84,24 @@ Widget _transaction(TransactionModel transaction) {
                     children: [
                       Text(Const.getTransType(transaction.transType ?? 0),
                           style: Get.textTheme.bodyMedium),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 2),
+                      transaction.location != null && transaction.location!.trim().isNotEmpty
+                          ? Row(
+                              children: [
+                                const Icon(
+                                  Icons.location_on_outlined,
+                                  size: 18,
+                                  color: AppTheme.defaultColor,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(transaction.location ?? 'Unknown Location'.tr,
+                                    style: Get.textTheme.bodyMedium?.copyWith(
+                                      color: AppTheme.defaultColor,
+                                    )),
+                              ],
+                            )
+                          : const SizedBox.shrink(),
+                      const SizedBox(height: 2),
                       Text(
                           Const.getDateTime(
                               transaction.transDate ?? DateTime.now()),
@@ -95,8 +112,8 @@ Widget _transaction(TransactionModel transaction) {
                   ),
                 ),
                 const SizedBox(width: 16),
-                Text( 
-                  '${transaction.point ?? 0} pts',
+                Text(
+                  '${Const.formatCurrency(transaction.point)}',
                   style: Get.textTheme.bodyMedium?.copyWith(
                     color: transaction.point != null
                         ? transaction.point! > 0

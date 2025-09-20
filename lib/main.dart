@@ -5,11 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:reward_center_kiosk/app_setting.dart';
-import 'package:reward_center_kiosk/route.dart';
-import 'package:reward_center_kiosk/util/services/in_active_controller.dart';
+import 'package:reward_center_kiosk/route.dart';  
 import 'package:reward_center_kiosk/util/theme.dart';
-import 'package:reward_center_kiosk/util/translation.dart';
-import 'package:reward_center_kiosk/util/widgets/inactive_detector.dart';
+import 'package:reward_center_kiosk/util/translation.dart'; 
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 

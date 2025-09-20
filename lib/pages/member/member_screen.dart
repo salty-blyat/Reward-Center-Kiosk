@@ -24,7 +24,7 @@ class MemberScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.onInit();
+      controller.onReady();
     });
     return Scaffold(
       appBar: PreferredSize(
@@ -71,6 +71,7 @@ Widget _buildAvailableOffer() {
                     crossAxisSpacing: 12,
                     childAspectRatio: 6 / 9,
                     children: controller.listOffer
+                        .where((OfferModel offer) => offer.canRedeem == true)
                         .map((OfferModel offer) => _buildOffer(offer))
                         .toList());
               }),
@@ -123,7 +124,8 @@ Widget _buildOffer(OfferModel offer) {
                   label: 'Redeem'.tr,
                   fontSize: 16,
                   onPressed: () {
-                    Get.toNamed(RouteName.redemptionOp, arguments: {"gift": offer});
+                    Get.toNamed(RouteName.redemptionOp,
+                        arguments: {"gift": offer});
                   }),
             ),
           )
@@ -159,7 +161,9 @@ Widget _buildProfile() {
                       const SizedBox(
                         height: 12,
                       ),
-                      PlayerClassBadge(playerClass: controller.member.value.playerClassName ?? '-')
+                      PlayerClassBadge(
+                          playerClass:
+                              controller.member.value.playerClassName ?? '-')
                     ],
                   ),
                   const SizedBox(
@@ -229,12 +233,11 @@ Widget _buildProfile() {
   });
 }
 
-
 Widget _buildCard(
     {required IconData icon, required String title, required String subtitle}) {
   return Container(
     height: 120,
-    width: 180,
+    width: 220,
     padding: const EdgeInsets.all(24),
     decoration: BoxDecoration(
       color: Colors.white,

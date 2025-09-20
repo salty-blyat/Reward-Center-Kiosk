@@ -13,6 +13,7 @@ class RedeemModel {
   double? unitCost;
   double? totalPoint;
   String? note;
+  String? passCode;
 
   RedeemModel({
     this.id,
@@ -24,6 +25,7 @@ class RedeemModel {
     this.unitCost,
     this.totalPoint,
     this.note,
+    this.passCode
   });
 
   factory RedeemModel.fromJson(Map<String, dynamic> json) =>

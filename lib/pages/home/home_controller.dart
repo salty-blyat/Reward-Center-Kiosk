@@ -20,7 +20,10 @@ class HomeController extends GetxController {
     super.onInit();
     await setCompanyInfoAsync();
     companyInfo.value = await loadCompanyFromStorage();
-    await loadSelectedLocation();
+    final location = await storage.loadDataAsync<LocationModel>(StorageKeys.selectedLocation, LocationModel.fromJson);
+    if (location != null) {
+      Future.delayed(Duration.zero, () => selectedLocation.value = location);
+    }
   }
 
   Future<void> getCompanyInfo() async {
@@ -53,30 +56,17 @@ class HomeController extends GetxController {
     await storage.write("selected_location", jsonEncode(model.toJson()));
   }
 
-  Future<LocationModel?> loadSelectedLocation() async {
-    final data = await storage.read(StorageKeys.selectedLocation);
-
-    if (data == null) return null;
-    if (data is String) {
-      final Map<String, dynamic> map = jsonDecode(data);
-      final location = LocationModel.fromJson(map);
-      Future.delayed(Duration.zero, () => selectedLocation.value = location);
-      return location;
-    }
-    return null;
-  }
-
   Future<void> setCompanyInfoAsync() async {
     await getCompanyInfo();
-    final Map<String, dynamic> model = companyInfo.value.toJson();  
+    final Map<String, dynamic> model = companyInfo.value.toJson();
     await storage.write("company", jsonEncode(model));
   }
 
   Future<CompanyModel> loadCompanyFromStorage() async {
     String model = await storage.read(StorageKeys.company);
-    if(model.isEmpty){
+    if (model.isEmpty) {
       return CompanyModel();
-    } 
+    }
     return CompanyModel.fromJson(jsonDecode(model));
   }
 }

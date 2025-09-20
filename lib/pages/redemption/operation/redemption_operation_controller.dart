@@ -1,25 +1,29 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:reactive_forms/reactive_forms.dart';
 import 'package:reward_center_kiosk/helpers/common_validators.dart';
 import 'package:reward_center_kiosk/helpers/storage.dart';
+import 'package:reward_center_kiosk/model/company_model.dart';
 import 'package:reward_center_kiosk/model/location_model.dart';
 import 'package:reward_center_kiosk/model/member_model.dart';
 import 'package:reward_center_kiosk/model/offer_model.dart';
 import 'package:reward_center_kiosk/model/redeem_model.dart';
 import 'package:reward_center_kiosk/pages/member/member_controller.dart';
 import 'package:reward_center_kiosk/pages/redemption/redemption_service.dart';
+import 'package:reward_center_kiosk/route.dart';
 import 'package:reward_center_kiosk/util/widgets/modal.dart';
 
 class RedemptionController extends GetxController {
   RxBool loading = false.obs;
+  TextEditingController passCodeTextField = TextEditingController();
   Rx<OfferModel> gift = OfferModel().obs;
   final RedemptionService service = RedemptionService();
   Rx<MemberModel> member = MemberModel().obs;
   final MemberController memberController = Get.put(MemberController());
   final storage = InMemoryStorage();
-  final Rx<LocationModel> selectedLocation = LocationModel().obs;
+  Rx<CompanyModel> companyInfo = CompanyModel().obs;
 
   final FormGroup formGroup = fb.group({
     "redeemDate": FormControl<DateTime>(value: DateTime.now()),
@@ -46,7 +50,8 @@ class RedemptionController extends GetxController {
     super.onReady();
     resetForm();
     setGift();
-    setModel();
+    await setModel();
+    await loadCompanyInfoAsync();
   }
 
   resetForm() {
@@ -85,7 +90,8 @@ class RedemptionController extends GetxController {
   Future<void> setModel() async {
     formGroup.control('unitCost').value = gift.value.cost;
     formGroup.control('playerId').value = memberController.member.value.id;
-    final location = await loadSelectedLocation();
+    final location = await storage.loadDataAsync<LocationModel>(
+        StorageKeys.selectedLocation, LocationModel.fromJson);
     formGroup.control('locationId').value = location?.id;
     formGroup.control('giftId').value = gift.value.id;
     print(formGroup.rawValue);
@@ -114,39 +120,67 @@ class RedemptionController extends GetxController {
   }
 
   Future<void> submit() async {
-    loading.value = true;
-
     try {
-      print('formGroup.rawValue ${formGroup.rawValue}');
+      print(
+          'companyInfo.value.passcodeThresholdPoint ${companyInfo.value.passcodeThresholdPoint}');
+      print(
+          'formGroup.control( unitCost ).value ${formGroup.control('unitCost').value}');
       final playerId = formGroup.control('playerId').value;
       final rawValue = Map<String, dynamic>.from(formGroup.value);
 
+      if (companyInfo.value.passcodeThresholdPoint! >=
+          formGroup.control('unitCost').value) {
+        final passcode = await Modal.passwordDialog();
+
+        if (passcode == null) {
+          return;
+        }
+
+        rawValue['passCode'] = passcode;
+        print(rawValue['passCode']);
+      }
+
+      loading.value = true;
       rawValue['redeemDate'] =
           (rawValue['redeemDate'] as DateTime?)?.toIso8601String();
       final model = RedeemModel.fromJson(rawValue);
-      var res = await service.add(playerId, model, RedeemModel.fromJson); 
+      await service.add(playerId, model, RedeemModel.fromJson);
+
       Get.back();
 
-      Modal.successDialog("Redeemed Successfully!", "Please claim your receipt below.");
-      loading.value = false;
+      MemberModel? member = await storage.loadDataAsync<MemberModel>(
+          StorageKeys.member, MemberModel.fromJson);
+      if (member != null && member.cardNumber != null) {
+        await memberController.find(member.cardNumber.toString());
+        Get.toNamed(RouteName.member,
+            arguments: {'cardNumber': member.cardNumber});
+      } else {
+        Modal.errorDialog(
+            "Something went wrong", "We cannot find your card number.");
+        Get.offAllNamed(RouteName.home);
+      }
 
+      Modal.successDialog(
+        "Redeemed Successfully!",
+        "Please claim your receipt below.",
+        () async {
+          print(companyInfo.value);
+        },
+      );
+      loading.value = false;
     } catch (e) {
       loading.value = false;
     }
     loading.value = false;
   }
 
-  Future<LocationModel?> loadSelectedLocation() async {
-    final data = await storage.read(StorageKeys.selectedLocation);
+  Future<void> loadCompanyInfoAsync() async {
+    final loadedCompany =
+        await storage.loadDataAsync(StorageKeys.company, CompanyModel.fromJson);
 
-    if (data == null) return null;
-    if (data is String) {
-      final Map<String, dynamic> map = jsonDecode(data);
-      final location = LocationModel.fromJson(map);
-      Future.delayed(Duration.zero, () => selectedLocation.value = location);
-      return location;
+    if (loadedCompany != null) {
+      companyInfo.value = loadedCompany;
     }
-    return null;
   }
 
   @override

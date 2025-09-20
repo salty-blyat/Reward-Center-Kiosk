@@ -18,6 +18,7 @@ RedeemModel _$RedeemModelFromJson(Map<String, dynamic> json) => RedeemModel(
       unitCost: (json['unitCost'] as num?)?.toDouble(),
       totalPoint: (json['totalPoint'] as num?)?.toDouble(),
       note: json['note'] as String?,
+      passCode: json['passCode'] as String?,
     );
 
 Map<String, dynamic> _$RedeemModelToJson(RedeemModel instance) =>
@@ -31,4 +32,5 @@ Map<String, dynamic> _$RedeemModelToJson(RedeemModel instance) =>
       'unitCost': instance.unitCost,
       'totalPoint': instance.totalPoint,
       'note': instance.note,
+      'passCode': instance.passCode,
     };
